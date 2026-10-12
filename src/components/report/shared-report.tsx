@@ -115,7 +115,7 @@ export function SharedReport({ slug }: { slug: string }) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-primary">Variable-rate nitrogen prescription</p>
-            <h1 className="mt-1 font-display text-[2.2rem] font-bold tracking-[-0.025em]">{payload.fieldName}</h1>
+            <h1 className="mt-1 font-display text-[2.2rem] font-bold tracking-[-0.02em]">{payload.fieldName}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <SourceBadge scene={payload.scene} compact />
               <span>Created {new Date(payload.generatedAt).toLocaleDateString("en-US", { dateStyle: "medium" })}</span>

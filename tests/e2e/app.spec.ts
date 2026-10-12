@@ -21,7 +21,7 @@ async function runDemoToResults(page: Page) {
 test.describe("landing", () => {
   test("renders hero, sourced stats and footer; CTA opens the demo", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Give every part of your field");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("The right fertilizer");
     await expect(page.getByText("Source: USGS")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
     await page.getByTestId("hero-demo").click();
@@ -40,10 +40,10 @@ test.describe("landing", () => {
 test.describe("workspace", () => {
   test("demo flow: analyze, live rate math, generate, charts, insights", async ({ page }) => {
     await runDemoToResults(page);
-    await expect(page.getByTestId("source-badge")).toContainText("Sentinel-2");
+    await expect(page.getByTestId("source-badge")).toContainText("Satellite photo");
 
     // rate math: zone rate = base x (1 + adjustment). Default 4 zones: Z4 adjustment -20%.
-    const base = page.getByLabel("Flat sidedress rate", { exact: true }).first();
+    const base = page.getByLabel("Your usual rate", { exact: true }).first();
     await base.fill("150");
     await expect(page.getByTestId("zone-rate-4")).toHaveText("120");
     await expect(page.getByTestId("zone-rate-1")).toHaveText("173"); // 150 x 1.15 = 172.5
@@ -53,7 +53,7 @@ test.describe("workspace", () => {
     await page.getByTestId("generate").click();
     await expect(page.getByTestId("results")).toBeVisible();
     await expect(page.getByTestId("health-score")).toBeVisible();
-    for (const id of ["chart-histogram", "chart-nitrogen", "chart-waterfall", "chart-profile", "chart-scatter"]) {
+    for (const id of ["chart-histogram", "chart-nitrogen", "chart-waterfall", "chart-profile"]) {
       await page.getByTestId(id).scrollIntoViewIfNeeded();
       await expect(page.getByTestId(id).locator("svg").first()).toBeVisible();
     }
@@ -61,8 +61,6 @@ test.describe("workspace", () => {
     await page.waitForTimeout(1800); // let number tickers settle
     const savings = num(await page.getByTestId("kpi-savings").locator(".font-display").innerText());
     expect(savings).toBeGreaterThan(1000);
-    const formula = page.getByText(/^= \(/).first();
-    await expect(formula).toContainText(`$${savings.toLocaleString("en-US")}`);
 
     // insights: either AI or rule-based, never empty
     await expect(page.getByTestId("insights").locator("li").first()).toBeVisible();
@@ -70,7 +68,7 @@ test.describe("workspace", () => {
     await expect(page.getByTestId("insights")).toContainText(/Zone 1|zone 1/);
 
     // map layers switch without errors
-    for (const l of ["rate", "primary", "secondary", "truecolor", "zones"]) await page.getByTestId(`layer-${l}`).click();
+    for (const l of ["rate", "primary", "truecolor", "zones"]) await page.getByTestId(`layer-${l}`).click();
 
     // zone filter chip
     await page.getByTestId("zone-chip-1").click();

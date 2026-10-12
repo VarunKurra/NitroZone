@@ -33,12 +33,12 @@ export function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease }}
-            className="font-display text-[2.6rem] font-bold leading-[1.05] tracking-[-0.035em] text-foreground sm:text-[3.4rem] lg:text-[3.7rem]"
+            className="font-display text-[2.6rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-foreground sm:text-[3.3rem] lg:text-[3.6rem]"
           >
-            Give every part of your field <span className="text-primary">just what it needs.</span>
+            The right fertilizer <span className="text-primary">for every acre.</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease }} className="mt-6 max-w-lg text-[1.15rem] leading-relaxed text-muted-foreground">
-            NitroZone uses free satellite photos to show farmers where their crops need more fertilizer and where they need less. That saves money and keeps fertilizer out of our rivers.
+          <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease }} className="mt-5 max-w-md text-[1.2rem] leading-relaxed text-muted-foreground">
+            Free satellite photos show where your field needs more fertilizer, and where it needs less.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease }} className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="xl" className="rounded-xl px-6 text-base">
@@ -75,11 +75,11 @@ export function WhyItMatters() {
         <div className="order-1 lg:order-2">
           <Reveal>
             <Eyebrow>Why it matters</Eyebrow>
-            <h2 id="why-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.03em] sm:text-[2.7rem]">
-              No field is the same from one end to the other.
+            <h2 id="why-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.7rem]">
+              Not every part of a field is the same.
             </h2>
             <p className="mt-5 text-[1.08rem] leading-relaxed text-muted-foreground">
-              Most fields get the same amount of fertilizer everywhere. Some spots need more, and some need much less. The extra costs farmers money, and rain can wash it into creeks and rivers.
+              Most fields get the same amount of fertilizer everywhere. Extra fertilizer costs farmers money, and rain can wash it into our rivers.
             </p>
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
@@ -87,7 +87,7 @@ export function WhyItMatters() {
               <Stat
                 value="66%"
                 tone="river"
-                text="of the nitrogen reaching the Gulf of Mexico from the Mississippi River basin comes from cropland."
+                text="of the nitrogen polluting the Gulf of Mexico through the Mississippi River comes from farmland."
                 source="USGS"
                 href="https://water.usgs.gov/nawqa/sparrow/gulf_findings/primary_sources.html"
               />
@@ -96,7 +96,7 @@ export function WhyItMatters() {
               <Stat
                 value="24 lb"
                 tone="field"
-                text="less nitrogen per acre, on average, when Missouri farmers matched fertilizer to what each part of the field needed, with no loss in yield."
+                text="less fertilizer per acre when Missouri farmers matched it to each part of the field, with the same harvest."
                 source="University of Missouri"
                 href="https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pro/NutrientManagement/Docs/Crop_Sensors_to_Guide_N_Application_to_Reduce_N_Loss.pdf"
               />
@@ -111,7 +111,7 @@ export function WhyItMatters() {
 function Stat({ value, text, source, href, tone }: { value: string; text: string; source: string; href: string; tone: "river" | "field" }) {
   return (
     <div className="h-full rounded-2xl border bg-white p-6">
-      <div className={cn("font-display text-[2.6rem] font-bold leading-none tracking-[-0.03em]", tone === "river" ? "text-river-600" : "text-field-700")}>{value}</div>
+      <div className={cn("font-display text-[2.6rem] font-bold leading-none tracking-[-0.02em]", tone === "river" ? "text-river-600" : "text-field-700")}>{value}</div>
       <p className="mt-3 text-[0.98rem] leading-relaxed text-foreground/80">{text}</p>
       <a href={href} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary hover:underline">
         Source: {source} <ArrowUpRight className="size-3" />
@@ -123,16 +123,16 @@ function Stat({ value, text, source, href, tone }: { value: string; text: string
 // ------------------------------------------------------------ how it works
 export function HowItWorks() {
   const steps = [
-    { icon: MapPinned, title: "Outline your field", text: "Find your farm on the map and click around the edges of your field." },
-    { icon: Satellite, title: "We read the satellite photo", text: "NitroZone looks at how green and healthy each part of the field is." },
-    { icon: Download, title: "Get your field plan", text: "See which areas need more or less, then download a map for your tractor." },
+    { icon: MapPinned, title: "Outline your field", text: "Find your farm and click around the edges." },
+    { icon: Satellite, title: "We check the crop", text: "A satellite photo shows which spots are healthy and which are struggling." },
+    { icon: Download, title: "Get your plan", text: "See how much fertilizer each area needs, and download it for your tractor." },
   ];
   return (
     <section id="how" className="scroll-mt-20 border-y bg-[#f7f3ea]" aria-labelledby="how-title">
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow>How it works</Eyebrow>
-          <h2 id="how-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.03em] sm:text-[2.7rem]">
+          <h2 id="how-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.7rem]">
             Three steps. About a minute.
           </h2>
         </Reveal>
@@ -168,15 +168,15 @@ export function HowItWorks() {
 // ---------------------------------------------------------------- benefits
 export function Benefits() {
   const items = [
-    { title: "Save money on fertilizer", text: "Put fertilizer where it helps the crop, and cut back where the crop is already doing well." },
-    { title: "Protect our water", text: "Less extra fertilizer on the field means less washing into the streams and rivers we all share." },
-    { title: "Works with your equipment", text: "Download a standard prescription file your sprayer or spreader can use, plus a simple PDF report." },
+    { title: "Save money", text: "Use fertilizer where it helps, and cut back where it doesn't." },
+    { title: "Cleaner rivers", text: "Less extra fertilizer means less washing into streams and rivers." },
+    { title: "Works with your tractor", text: "Download a file your spreader can use, plus a one-page report." },
   ];
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28" aria-labelledby="benefits-title">
       <Reveal className="max-w-2xl">
         <Eyebrow>What farmers get</Eyebrow>
-        <h2 id="benefits-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.03em] sm:text-[2.7rem]">
+        <h2 id="benefits-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.7rem]">
           Better for the farm. Better for the river.
         </h2>
       </Reveal>
@@ -203,8 +203,8 @@ export function Mission() {
           <Image src="/images/farmer-in-corn.jpg" alt="" fill sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/10" />
           <div className="relative max-w-xl px-8 py-20 text-white sm:px-14 sm:py-24">
-            <h2 className="font-display text-[2rem] font-bold leading-[1.15] tracking-[-0.025em] sm:text-[2.5rem]">Built for the farmers who feed us, and the rivers we share.</h2>
-            <p className="mt-4 text-lg text-white/80">Try it on a real Missouri field. It takes about a minute.</p>
+            <h2 className="font-display text-[2rem] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[2.5rem]">Built for the farmers who feed us, and the rivers we share.</h2>
+            <p className="mt-4 text-lg text-white/80">Try it on a real Missouri field in about a minute.</p>
             <Button asChild size="xl" variant="accent" className="mt-8 rounded-xl px-6 text-base">
               <Link href="/app?demo=1">
                 Try it now <ArrowRight />
@@ -220,15 +220,16 @@ export function Mission() {
 // -------------------------------------------------------------------- FAQ
 export function Faq() {
   const qs = [
-    ["Does it cost anything?", "No. NitroZone is free and uses free satellite photos from the European Space Agency. You don't need an account."],
-    ["Which crops does it work for?", "Crops that need nitrogen fertilizer during the season, like corn, wheat and sorghum. It was built and tested on Missouri corn. Crops like soybeans make their own nitrogen, so they usually don't need it."],
-    ["Does it replace walking my fields?", "No. A satellite can see where crops look weaker, but not always why. NitroZone points you to the spots worth checking, and you can change any area before you download your plan."],
-    ["Can my tractor use the file?", "NitroZone exports a standard shapefile with a fertilizer rate for every area, which many sprayers, spreaders and farm apps can import. Check your equipment's instructions before heading out."],
+    ["Does it cost anything?", "No. It's free, and you don't need an account."],
+    ["Which crops does it work for?", "Crops that need nitrogen fertilizer, like corn, wheat and sorghum. Soybeans make their own, so they usually don't need it."],
+    ["Where in Missouri does it work?", "Anywhere in the state. Satellite photos cover every county, about every 5 days."],
+    ["Does it replace walking my fields?", "No. It shows you where to look. You can change any area before you download your plan."],
+    ["Can my tractor use the file?", "It downloads a standard shapefile that most spreaders and farm apps can open. Check your equipment's instructions first."],
   ];
   return (
     <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-5 pb-24 sm:px-8" aria-labelledby="faq-title">
       <Reveal className="text-center">
-        <h2 id="faq-title" className="font-display text-[2.2rem] font-bold tracking-[-0.03em]">
+        <h2 id="faq-title" className="font-display text-[2.2rem] font-bold tracking-[-0.02em]">
           Common questions
         </h2>
       </Reveal>

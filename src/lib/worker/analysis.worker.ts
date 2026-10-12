@@ -86,7 +86,7 @@ async function loadRaster(
         sceneCloudPct: raw.cloudCover,
         resolutionM: 10,
         provider: "Sentinel-2 L2A (ESA Copernicus) via Microsoft Planetary Computer",
-        notes: source === "cached" ? ["Bundled copy of the real scene, so the demo works offline."] : [],
+        notes: [],
       },
     };
   };
@@ -159,17 +159,17 @@ async function loadRaster(
         try {
           return { ...(await live(src.scene)), fallbackReason: null };
         } catch (e) {
-          reasons.push(`Live imagery unavailable (${e instanceof Error && e.name === "AbortError" ? "timed out" : e instanceof Error ? e.message : "error"})`);
+          reasons.push(e instanceof Error && e.name === "AbortError" ? "The satellite service was too slow" : "The satellite service couldn't be reached");
         }
-      } else reasons.push("No suitable live scene found for this field and date range");
+      } else reasons.push("No clear satellite photo was found");
       if (src.cachedUrl) {
         try {
-          return { ...(await cached(src.cachedUrl)), fallbackReason: `${reasons.join("; ")}. Using the bundled copy of the scene.` };
-        } catch (e) {
-          reasons.push(`bundled scene failed (${e instanceof Error ? e.message : "error"})`);
+          return { ...(await cached(src.cachedUrl)), fallbackReason: `${reasons.join(". ")}, so we used the saved copy of the photo.` };
+        } catch {
+          reasons.push("the saved photo didn't load");
         }
       }
-      return { ...synthetic(), fallbackReason: `${reasons.join("; ")}. Showing a SYNTHETIC raster for demonstration only.` };
+      return { ...synthetic(), fallbackReason: `${reasons.join(". ")}. Showing practice data so you can try the app. Don't use this plan in a real field.` };
     }
   }
 }

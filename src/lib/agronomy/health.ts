@@ -67,44 +67,44 @@ export function dataConfidence(params: {
 
   if (scene.source === "synthetic") {
     score -= 60;
-    reasons.push({ ok: false, text: "Synthetic demonstration raster, not a real image of this field" });
+    reasons.push({ ok: false, text: "Practice data, not a real photo of this field" });
   } else if (scene.source === "cached") {
-    reasons.push({ ok: true, text: "Real Sentinel-2 scene (bundled copy for offline use)" });
+    reasons.push({ ok: true, text: "Real satellite photo of this field" });
   } else if (scene.source === "drone") {
-    reasons.push({ ok: true, text: "Your drone image (RGB indices are less nitrogen-specific than red-edge)" });
+    reasons.push({ ok: true, text: "Your drone photo (a little less precise than satellite)" });
     score -= 10;
   } else {
-    reasons.push({ ok: true, text: "Live Sentinel-2 L2A scene" });
+    reasons.push({ ok: true, text: "Real satellite photo of this field" });
   }
 
   const clearPct = Math.round(clearFraction * 100);
-  if (clearFraction >= 0.97) reasons.push({ ok: true, text: `${clearPct}% of the field was cloud-free` });
+  if (clearFraction >= 0.97) reasons.push({ ok: true, text: `${clearPct}% of the field was clear of clouds` });
   else if (clearFraction >= 0.8) {
     score -= 15;
-    reasons.push({ ok: false, text: `${clearPct}% of the field was cloud-free; masked cells were estimated from neighbours` });
+    reasons.push({ ok: false, text: `${clearPct}% of the field was clear of clouds; the rest was estimated` });
   } else {
     score -= 35;
-    reasons.push({ ok: false, text: `Only ${clearPct}% of the field was cloud-free; pick a clearer date if possible` });
+    reasons.push({ ok: false, text: `Only ${clearPct}% of the field was clear. Try a clearer photo.` });
   }
 
   if (filledShare > 0.02) {
     score -= Math.min(20, Math.round(filledShare * 50));
-    reasons.push({ ok: false, text: `${Math.round(filledShare * 100)}% of grid cells were gap-filled` });
+    reasons.push({ ok: false, text: `${Math.round(filledShare * 100)}% of the field had to be estimated` });
   }
 
   if (scene.sensor === "sentinel2") {
     if (meanSecondary < 0.4) {
       score -= 25;
-      reasons.push({ ok: false, text: "Sparse canopy (NDVI < 0.4): soil may dominate the signal; is the corn past V6?" });
-    } else reasons.push({ ok: true, text: `Canopy is established (mean NDVI ${meanSecondary.toFixed(2)})` });
+      reasons.push({ ok: false, text: "The crop is still small, so the photo mostly shows soil. Try a later date." });
+    } else reasons.push({ ok: true, text: "The crop is big enough to measure" });
   }
 
   if (scene.acquired && scene.source === "live") {
     const ageDays = ((params.today ?? new Date()).getTime() - new Date(scene.acquired).getTime()) / 86_400_000;
     if (ageDays > 14) {
       score -= 10;
-      reasons.push({ ok: false, text: `Image is ${Math.round(ageDays)} days old; crop condition may have changed` });
-    } else reasons.push({ ok: true, text: `Image is ${Math.max(0, Math.round(ageDays))} days old` });
+      reasons.push({ ok: false, text: `Photo is ${Math.round(ageDays)} days old; the crop may have changed` });
+    } else reasons.push({ ok: true, text: `Photo is ${Math.max(0, Math.round(ageDays))} days old` });
   }
 
   score = Math.max(0, Math.min(100, score));
@@ -123,31 +123,16 @@ export function ruleInsights(zones: ZoneSummary[], totals: PrescriptionTotals, h
   const high = nonEmpty[nonEmpty.length - 1];
   const pct = (a: number) => Math.round((a / totals.areaAc) * 100);
 
+  void indexName;
+  out.push(`Your field scores ${health.score} out of 100 for crop health (${health.label.toLowerCase()}).`);
   out.push(
-    `${pct(health.sufficientShare * totals.areaAc)}% of the field is within 5% of the reference ${indexName}; ` +
-      `the field health score is ${health.score}/100 (${health.label.toLowerCase()}).`,
+    `Zone ${low.zone} (${low.areaAc.toFixed(0)} acres, ${pct(low.areaAc)}% of the field) is the weakest. ` +
+      `Walk it first: the cause could be water, soil or pests, not just fertilizer.`,
   );
-  out.push(
-    `Zone ${low.zone} (${low.areaAc.toFixed(1)} ac, ${pct(low.areaAc)}% of the field) shows the lowest vigor ` +
-      `(${indexName} ${low.primary.toFixed(3)}, SI ${low.sufficiency.toFixed(2)}). Scout it before sidedressing: ` +
-      `low vigor can also come from water stress, compaction or poor stand, where extra N will not pay.`,
-  );
-  if (high.zone !== low.zone)
-    out.push(
-      `Zone ${high.zone} (${high.areaAc.toFixed(1)} ac) is the most vigorous at SI ${high.sufficiency.toFixed(2)}; ` +
-        `it receives ${high.rateLbAc.toFixed(0)} lb N/ac in this plan.`,
-    );
   if (totals.usesMoreThanFlat)
-    out.push(
-      `This plan uses ${Math.abs(totals.savedLbN).toFixed(0)} lb MORE nitrogen than a flat rate. That can be the right call ` +
-        `on a stressed field, but it will not save fertilizer cost.`,
-    );
-  else
-    out.push(
-      `Compared with a flat ${(totals.flatLbN / totals.areaAc).toFixed(0)} lb N/ac, this plan uses ` +
-        `${totals.savedLbN.toFixed(0)} lb less N (estimated $${totals.savedUsd.toFixed(0)} at your N price).`,
-    );
-  if (health.variability < 0.03)
-    out.push(`Vigor is very uniform (CV ${(health.variability * 100).toFixed(1)}%). A flat rate may be just as good here.`);
+    out.push(`This plan uses ${Math.abs(totals.savedLbN).toFixed(0)} lb more fertilizer than your usual rate.`);
+  else out.push(`This plan saves about ${totals.savedLbN.toFixed(0)} lb of fertilizer, worth about $${totals.savedUsd.toFixed(0)}.`);
+  if (high.zone !== low.zone) out.push(`Zone ${high.zone} is the healthiest, so it gets the least: ${high.rateLbAc.toFixed(0)} lb per acre.`);
+  if (health.variability < 0.03) out.push("The field is very even, so one rate everywhere might work just as well.");
   return out;
 }

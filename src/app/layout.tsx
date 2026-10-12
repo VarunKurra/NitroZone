@@ -1,17 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { Providers } from "@/components/providers";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 
-const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
+// One friendly, highly readable family for headings and text.
+const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"], display: "swap", weight: ["400", "500", "600", "700", "800"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["500", "600", "700", "800"],
-});
 
 export const metadata: Metadata = {
   title: { default: "NitroZone: the right amount of fertilizer for every part of your field", template: "%s | NitroZone" },
@@ -32,7 +27,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // suppressHydrationWarning: browser extensions (Grammarly, page assistants) add attributes to <html>/<body>
     // before React loads. This only silences attribute differences on these two elements.
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${bricolage.variable} h-full`} suppressHydrationWarning>
+    <html lang="en" className={`${jakarta.variable} ${geistMono.variable} h-full`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <a
           href="#main"

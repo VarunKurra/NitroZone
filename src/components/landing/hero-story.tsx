@@ -19,16 +19,15 @@ type HeroData = { width: number; height: number; zoneCount: number; outline: num
 const H = hero as unknown as HeroData;
 
 const STAGES = [
-  { label: "Every field has weak spots and strong spots", hold: 3200 },
-  { label: "NitroZone maps what each part of the field needs", hold: 4200 },
-  { label: "The right amount, in the right place", hold: 0 },
+  { label: "Some spots struggle. Some thrive.", hold: 3500 },
+  { label: "NitroZone maps what each spot needs", hold: 4500 },
+  { label: "Healthy crops, less waste", hold: 4500 },
 ];
 
 const ring = (pts: number[][]) => `M${pts.map((p) => `${p[0]},${p[1]}`).join("L")}Z`;
 
 export function HeroStory() {
   const [stage, setStage] = useState(0);
-  const [auto, setAuto] = useState(true);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // One path string per zone (much cheaper to draw than one element per cell).
@@ -41,18 +40,15 @@ export function HeroStory() {
     return [...byZone.entries()].map(([z, parts]) => ({ z, d: parts.join("") }));
   }, []);
 
+  // Loops forever: farmer -> map -> thriving field -> farmer ...
   useEffect(() => {
-    if (!auto || stage >= STAGES.length - 1) return;
-    timer.current = setTimeout(() => setStage((s) => s + 1), STAGES[stage].hold);
+    timer.current = setTimeout(() => setStage((s) => (s + 1) % STAGES.length), STAGES[stage].hold);
     return () => {
       if (timer.current) clearTimeout(timer.current);
     };
-  }, [stage, auto]);
+  }, [stage]);
 
-  const go = (i: number) => {
-    setAuto(false);
-    setStage(i);
-  };
+  const go = (i: number) => setStage(i);
 
   return (
     <div className="relative mx-auto w-full max-w-[480px] lg:max-w-none">

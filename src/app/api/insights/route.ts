@@ -57,13 +57,13 @@ function rateLimited(ip: string): boolean {
 function prompt(b: Body): string {
   const task =
     b.mode === "zone"
-      ? `Explain ZONE ${b.focusZone} to the farmer in 2-3 short sentences: what its numbers mean, why it gets its rate, and one practical thing to check in the field.`
-      : "Write 3 to 5 short insights (one or two sentences each) a Missouri corn farmer would find useful before sidedressing.";
+      ? `Explain ZONE ${b.focusZone} in 2 short sentences: how healthy it is compared with the rest of the field, why it gets its fertilizer rate, and one thing to check.`
+      : "Write 3 or 4 short insights, one sentence each (under 25 words), for a farmer. Also understandable by someone who has never farmed.";
   return [
     "You are an agronomy assistant inside NitroZone, a variable-rate nitrogen tool for corn.",
     "Rules: use ONLY the numbers in the JSON below; never invent statistics, yields or prices. Round sensibly.",
     `Vegetation indices (${b.indexName}) are a stress proxy, not a direct nitrogen measurement: low vigor may also be water stress, compaction, disease or poor stand. Say "estimated" for savings.`,
-    "Plain English, no jargon without explanation, no markdown headings, no emojis.",
+    "Plain, friendly English. No jargon (avoid NDRE, SI, sufficiency index, vigor); say 'crop health' instead. No markdown, no emojis.",
     task,
     "",
     "DATA:",

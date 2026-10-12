@@ -12,10 +12,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-bricolage), var(--font-geist), sans-serif;
-  --font-heading: var(--font-bricolage), var(--font-geist), sans-serif;
+  --font-display: var(--font-jakarta), sans-serif;
+  --font-heading: var(--font-jakarta), sans-serif;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -167,7 +167,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "ss01", "cv11";
+    font-size: 1.0625rem;
+    line-height: 1.6;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
@@ -237,7 +238,7 @@ html.present [data-dev-only] {
 
 /* MapLibre: match our type + soften controls */
 .maplibregl-map {
-  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
 }
 .maplibregl-ctrl-group {
   border-radius: 10px !important;

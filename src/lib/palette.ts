@@ -22,10 +22,10 @@ export function zoneColor(zone: number, zoneCount: number): string {
 
 /** Plain-language name for each zone, by relative position. */
 export function zoneLabel(zone: number, zoneCount: number): string {
-  if (zone === 1) return "Lowest vigor";
-  if (zone === zoneCount) return "Highest vigor";
+  if (zone === 1) return "Weakest crop";
+  if (zone === zoneCount) return "Strongest crop";
   const mid = (zoneCount + 1) / 2;
-  if (zone === mid) return "Average vigor";
+  if (zone === mid) return "Average crop";
   return zone < mid ? "Below average" : "Above average";
 }
 

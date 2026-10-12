@@ -483,10 +483,10 @@ export default function FieldMap() {
         >
           <div className="flex items-center gap-1.5 font-semibold">
             <span className="size-2.5 rounded-sm" style={{ background: zoneColor(rx.zones[hoverInfo.id], analysis!.zoning.zoneCount) }} />
-            Zone {rx.zones[hoverInfo.id]} · {rx.rates[hoverInfo.id].toFixed(0)} lb N/ac
+            Zone {rx.zones[hoverInfo.id]} · {rx.rates[hoverInfo.id].toFixed(0)} lb/acre
           </div>
           <div className="mt-0.5 text-muted-foreground tabular">
-            {rx.names.primary} {hoverCell.primary.toFixed(3)} · SI {(hoverCell.primary / rx.reference.value).toFixed(2)}
+            Crop health {Math.round((hoverCell.primary / rx.reference.value) * 100)}%
           </div>
         </div>
       )}

@@ -18,9 +18,8 @@ export function LayerSwitcher() {
   if (!analysis || !rx) return null;
   const opts: { v: MapLayer; label: string; disabled?: boolean }[] = [
     { v: "zones", label: "Zones" },
-    { v: "rate", label: "N rate" },
-    { v: "primary", label: rx.names.primary },
-    { v: "secondary", label: rx.names.secondary },
+    { v: "rate", label: "Fertilizer" },
+    { v: "primary", label: "Crop health" },
     { v: "truecolor", label: "True color", disabled: !analysis.preview.rgba },
   ];
   return (
@@ -63,7 +62,7 @@ export function MapLegend() {
   if (layer === "zones")
     return (
       <div className={box} aria-label="Zone legend">
-        <div className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">Zone · rate</div>
+        <div className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">Zone · lb/acre</div>
         <ul className="space-y-1">
           {rx.summaries.map((z) => (
             <li key={z.zone} className="flex items-center gap-2 text-xs">
@@ -74,28 +73,26 @@ export function MapLegend() {
             </li>
           ))}
         </ul>
-        <div className="mt-1.5 text-[0.65rem] text-muted-foreground">lb N/ac</div>
       </div>
     );
   if (layer === "truecolor")
     return (
       <div className={box}>
-        <div className="text-xs font-medium">Sentinel-2 true color</div>
-        <div className="text-[0.68rem] text-muted-foreground">Bands 4-3-2, 10 m</div>
+        <div className="text-xs font-medium">Satellite photo</div>
       </div>
     );
   const isRate = layer === "rate";
   const lo = isRate ? Math.min(...rx.rates) : ranges[layer as "primary" | "secondary"][0];
   const hi = isRate ? Math.max(...rx.rates) : ranges[layer as "primary" | "secondary"][1];
   const ramp = isRate ? RATE_RAMP : INDEX_RAMP;
-  const name = isRate ? "Nitrogen rate (lb N/ac)" : layer === "primary" ? `${rx.names.primary} (per 10 m pixel)` : `${rx.names.secondary} (per 10 m pixel)`;
+  const name = isRate ? "Fertilizer (lb/acre)" : "Crop health";
   return (
     <div className={cn(box, "w-56")}>
       <div className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">{name}</div>
       <div className="h-2.5 rounded-full" style={{ background: `linear-gradient(90deg, ${ramp.join(",")})` }} />
       <div className="mt-1 flex justify-between text-[0.7rem] font-medium tabular">
         <span>{isRate ? lo.toFixed(0) : lo.toFixed(2)}</span>
-        <span className="text-muted-foreground">{isRate ? "more N →" : "more vigor →"}</span>
+        <span className="text-muted-foreground">{isRate ? "more →" : "healthier →"}</span>
         <span>{isRate ? hi.toFixed(0) : hi.toFixed(2)}</span>
       </div>
     </div>
@@ -125,7 +122,7 @@ export function CellInspector() {
         >
           <div className="flex items-start justify-between">
             <div>
-              <div className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">Grid cell #{cell.id}</div>
+              <div className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">This spot</div>
               <div className="mt-1 flex items-center gap-2 font-display text-lg font-semibold">
                 <span className="size-3.5 rounded-[4px]" style={{ background: zoneColor(rx.zones[id], zc) }} />
                 Zone {rx.zones[id]}
@@ -137,14 +134,10 @@ export function CellInspector() {
             </Button>
           </div>
           <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
-            <Item k="N rate" v={`${rx.rates[id].toFixed(0)} lb/ac`} strong />
-            <Item k="N in cell" v={`${(rx.rates[id] * cell.areaAc).toFixed(1)} lb`} />
-            <Item k={rx.names.primary} v={cell.primary.toFixed(3)} />
-            <Item k={rx.names.secondary} v={cell.secondary.toFixed(3)} />
-            <Item k="Sufficiency" v={(cell.primary / rx.reference.value).toFixed(2)} />
-            <Item k="Area" v={`${cell.areaAc.toFixed(3)} ac`} />
-            <Item k="Clear pixels" v={`${Math.round(cell.validFraction * 100)}%`} />
-            <Item k="Estimated" v={cell.filled ? "Yes (cloud)" : "No"} />
+            <Item k="Fertilizer" v={`${rx.rates[id].toFixed(0)} lb/acre`} strong />
+            <Item k="Crop health" v={`${Math.round((cell.primary / rx.reference.value) * 100)}%`} />
+            <Item k="Size" v={`${cell.areaAc.toFixed(2)} acres`} />
+            <Item k="Under cloud?" v={cell.filled ? "Yes, estimated" : "No"} />
           </dl>
           <div className="mt-3 flex items-center gap-1.5 text-[0.7rem] text-muted-foreground">
             <MapPin className="size-3" />
@@ -153,7 +146,7 @@ export function CellInspector() {
             </span>
           </div>
           <div className="mt-3 border-t pt-3">
-            <div className="mb-1.5 text-xs font-medium text-muted-foreground">Move this cell to</div>
+            <div className="mb-1.5 text-xs font-medium text-muted-foreground">Change zone</div>
             <div className="flex gap-1.5">
               {Array.from({ length: zc }, (_, i) => i + 1).map((z) => (
                 <button
@@ -169,7 +162,7 @@ export function CellInspector() {
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-[0.68rem] text-muted-foreground">Arrow keys move to neighbouring cells · Esc closes</p>
+
           </div>
         </motion.div>
       )}
@@ -198,7 +191,7 @@ export function BrushBanner() {
           <span className="rounded-md px-1.5 py-0.5 text-xs font-bold" style={{ background: zoneColor(brush, zc) }}>
             Zone {brush}
           </span>
-          <span className="hidden text-white/70 sm:inline">· click or drag on cells</span>
+          <span className="hidden text-white/70 sm:inline">· click or drag on the map</span>
           <Button size="xs" variant="inverse" className="rounded-full" onClick={() => useApp.setState({ brushZone: null })}>
             Done
           </Button>

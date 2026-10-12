@@ -65,8 +65,8 @@ export async function runAnalysis(opts: { useBundled?: boolean } = {}) {
       mapLayer: "zones",
       analysisVersion: s.analysisVersion + 1,
     }));
-    if (payload.fallbackReason) toast.warning("Using fallback imagery", { description: payload.fallbackReason, duration: 9000 });
-    else toast.success("Analysis complete", { description: `${payload.cells.length.toLocaleString()} grid cells, ${payload.zoning.zoneCount} zones` });
+    if (payload.fallbackReason) toast.warning("Heads up", { description: payload.fallbackReason, duration: 9000 });
+    else toast.success("Field checked", { description: `Found ${payload.zoning.zoneCount} zones.` });
     logRun({
       source: payload.scene.source,
       area_ac: payload.fieldAreaAc,
@@ -79,7 +79,7 @@ export async function runAnalysis(opts: { useBundled?: boolean } = {}) {
   } catch (e) {
     const message = e instanceof Error ? e.message : String(e);
     useApp.setState({ status: "error", error: message });
-    toast.error("Analysis failed", { description: message });
+    toast.error("Something went wrong", { description: message });
     logRun({ source: st.source === "drone" ? "drone" : "live", success: false, error: message, is_demo: st.isDemo });
   }
 }

@@ -20,12 +20,9 @@ import {
   Line,
   ReferenceLine,
   ResponsiveContainer,
-  Scatter,
-  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
-  ZAxis,
 } from "recharts";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Button } from "@/components/ui/button";
@@ -49,7 +46,7 @@ function useCore() {
 export function VigorHistogram() {
   const { analysis, rx, zc, zoneFilter } = useCore();
   const valueRange = useApp((s) => s.valueRange);
-  const [key, setKey] = useState<"primary" | "secondary">("primary");
+  const key = "primary" as const;
   const bins = useMemo(() => {
     if (!analysis || !rx) return [];
     const vals = analysis.cells.map((c) => c[key]);
@@ -79,32 +76,22 @@ export function VigorHistogram() {
   return (
     <ChartCard
       testId="chart-histogram"
-      question="How is crop vigor spread across the field?"
+      question="How healthy is the crop?"
       answer={
         <>
-          Acres (y) in each {name} band (x), colored by the zone most of those acres belong to. <strong className="font-medium text-foreground">Click a bar</strong> to highlight those cells on the map.
+          Each bar is a slice of the field, from weaker crop (left) to healthier crop (right). <strong className="font-medium text-foreground">Click a bar</strong> to find those spots on the map.
         </>
-      }
-      actions={
-        <ToggleGroup type="single" size="sm" value={key} onValueChange={(v) => v && (setKey(v as "primary" | "secondary"), useApp.setState({ valueRange: null }))} className="rounded-lg bg-muted p-0.5" aria-label="Index">
-          <ToggleGroupItem value="primary" className="h-7 rounded-md px-2.5 text-xs data-[state=on]:bg-white data-[state=on]:shadow-sm">
-            {rx.names.primary}
-          </ToggleGroupItem>
-          <ToggleGroupItem value="secondary" className="h-7 rounded-md px-2.5 text-xs data-[state=on]:bg-white data-[state=on]:shadow-sm">
-            {rx.names.secondary}
-          </ToggleGroupItem>
-        </ToggleGroup>
       }
       footnote={
         active ? (
           <span className="flex items-center gap-2">
-            Showing {name} {active.min.toFixed(3)} to {active.max.toFixed(3)} on the map.
+            Showing those spots on the map.
             <Button size="xs" variant="outline" onClick={() => useApp.setState({ valueRange: null })}>
               Clear
             </Button>
           </span>
         ) : ref !== undefined ? (
-          `Dashed line: reference ${name} ${ref.toFixed(3)} (${rx.reference.kind === "strip" ? "N-rich strip" : "best 5% of the field"}).`
+          `Dashed line: the healthiest part of the field.`
         ) : undefined
       }
     >
@@ -158,16 +145,16 @@ export function NitrogenByZone() {
     <ChartCard
       testId="chart-nitrogen"
       delay={0.05}
-      question="How much nitrogen goes where?"
-      answer={top ? `Zone ${top.zone} takes the most N (${fmt0(top.totalLbN)} lb, ${((top.totalLbN / rx.totals.variableLbN) * 100).toFixed(0)}% of the plan) because it covers ${top.areaAc.toFixed(1)} ac at ${top.rateLbAc.toFixed(0)} lb/ac.` : undefined}
-      footnote="Colored bars: pounds of N in this plan. Gray bars: what a flat rate would put on the same acres."
+      question="Where does the fertilizer go?"
+      answer={top ? `Zone ${top.zone} gets the most: ${fmt0(top.totalLbN)} lb.` : undefined}
+      footnote="Colored: pounds in your plan. Gray: pounds if you used one rate everywhere."
     >
       <div className="mb-2 flex items-center gap-4 text-[0.72rem] text-muted-foreground">
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-4 rounded-sm bg-gradient-to-r from-zone-1 via-zone-3 to-zone-5" /> Variable rate
+          <span className="h-2.5 w-4 rounded-sm bg-gradient-to-r from-zone-1 via-zone-3 to-zone-5" /> Your plan
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-4 rounded-sm bg-[#d9ddd3]" /> Flat rate
+          <span className="h-2.5 w-4 rounded-sm bg-[#d9ddd3]" /> One rate everywhere
         </span>
       </div>
       <div className="h-52">
@@ -235,12 +222,12 @@ export function SavingsWaterfall() {
       question="Where do the savings come from?"
       answer={
         t.usesMoreThanFlat
-          ? `This plan adds ${fmt0(-t.savedLbN)} lb of N compared with flat. Lower the stressed-zone increases to save.`
+          ? `This plan uses ${fmt0(-t.savedLbN)} lb more than one rate everywhere.`
           : biggest
-            ? `Most of the ${fmt0(t.savedLbN)} lb saved comes from Zone ${biggest.zone} (${fmt0(biggest.value)} lb, about $${fmt0(biggest.value * price)}).`
+            ? `Zone ${biggest.zone} saves the most: about $${fmt0(biggest.value * price)}.`
             : "No change from the flat rate."
       }
-      footnote={<>Starts from the flat-rate total, then each zone adds (amber) or removes (blue) pounds of N. Savings = (flat lb − plan lb) × ${price.toFixed(2)}/lb.</>}
+      footnote={<>Starts with one rate everywhere. Each zone then adds (orange) or saves (blue) fertilizer.</>}
     >
       <div className="h-52">
         <ResponsiveContainer width="100%" height="100%">
@@ -314,10 +301,10 @@ export function FieldProfile() {
     <ChartCard
       testId="chart-profile"
       delay={0.05}
-      question="How do different parts of the field compare?"
+      question="How does the field change across its length?"
       answer={
         data.length
-          ? `Average ${rx.names.primary} along the field from the ${dirLabel[0]}. Weakest around ${data[lowIdx].dist} m, strongest around ${data[highIdx].dist} m.`
+          ? `Weakest about ${data[lowIdx].dist} m from the ${dirLabel[0]}, strongest about ${data[highIdx].dist} m in.`
           : undefined
       }
       actions={
@@ -330,7 +317,7 @@ export function FieldProfile() {
           </ToggleGroupItem>
         </ToggleGroup>
       }
-      footnote={`Line: mean ${rx.names.primary} of each ${useApp.getState().analysisSettings.cellSizeM} m strip. Shaded: middle 80% of cells in that strip (wider = more uneven).`}
+      footnote="Line: average crop health along the field. Shaded band: how uneven that strip is."
     >
       <div className="h-52">
         <ResponsiveContainer width="100%" height="100%">
@@ -359,111 +346,6 @@ export function FieldProfile() {
             <ReferenceLine y={rx.reference.value} stroke="#14201a" strokeDasharray="4 3" strokeWidth={1} />
             <Line dataKey="mean" stroke="#15653d" strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }} {...ANIM} />
           </ComposedChart>
-        </ResponsiveContainer>
-      </div>
-    </ChartCard>
-  );
-}
-
-// ----------------------------------------------------------------- scatter
-export function VigorScatter() {
-  const { analysis, rx, zc, zoneFilter } = useCore();
-  const series = useMemo(() => {
-    if (!analysis || !rx) return [];
-    return Array.from({ length: zc }, (_, k) => ({
-      zone: k + 1,
-      points: analysis.cells
-        .map((c, i) => ({ x: c.secondary, y: c.primary, id: c.id, zone: rx.zones[i], filled: c.filled, area: c.areaAc }))
-        .filter((p) => p.zone === k + 1 && Number.isFinite(p.x) && Number.isFinite(p.y)),
-    }));
-  }, [analysis, rx, zc]);
-  const stats = useMemo(() => {
-    if (!analysis) return null;
-    const pts = analysis.cells.filter((c) => Number.isFinite(c.primary) && Number.isFinite(c.secondary));
-    if (pts.length < 10) return null;
-    const xs = pts.map((p) => p.secondary);
-    const ys = pts.map((p) => p.primary);
-    const pad = (lo: number, hi: number) => [Math.floor((lo - (hi - lo) * 0.05) * 50) / 50, Math.ceil((hi + (hi - lo) * 0.05) * 50) / 50];
-    // Among the greenest half of cells (by the secondary index), compare relative spread (CV).
-    const medX = percentile(xs, 50);
-    const top = pts.filter((p) => p.secondary >= medX);
-    const cv = (v: number[]) => {
-      const m = v.reduce((a, b) => a + b, 0) / v.length;
-      return Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length) / Math.abs(m);
-    };
-    return {
-      x: pad(percentile(xs, 0.5), percentile(xs, 99.5)) as [number, number],
-      y: pad(percentile(ys, 0.5), percentile(ys, 99.5)) as [number, number],
-      ratio: cv(top.map((p) => p.primary)) / (cv(top.map((p) => p.secondary)) || 1),
-    };
-  }, [analysis]);
-  if (!analysis || !rx || !stats) return null;
-  const isS2 = analysis.scene.sensor === "sentinel2";
-  return (
-    <ChartCard
-      testId="chart-scatter"
-      delay={0.1}
-      question={isS2 ? "Is the red-edge signal adding information?" : "Do the two drone indices agree?"}
-      answer={
-        isS2
-          ? `Each dot is a grid cell (x: NDVI, y: NDRE). In the greenest half of the field, NDRE varies ${stats.ratio.toFixed(1)}× more than NDVI, so it can still separate cells after NDVI saturates. That's why zones are built on NDRE.`
-          : "Each dot is a grid cell (x: ExG, y: VARI). Cells where the two indices disagree deserve a look in the field."
-      }
-      footnote={<>Hover a dot to find that cell on the map; click to inspect it. Hollow dots were gap-filled under cloud.</>}
-    >
-      <div className="mb-2 flex flex-wrap gap-x-3 gap-y-1 text-[0.72rem] text-muted-foreground">
-        {series.map((s) => (
-          <span key={s.zone} className="flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full" style={{ background: zoneColor(s.zone, zc) }} /> Zone {s.zone}
-          </span>
-        ))}
-      </div>
-      <div className="h-56">
-        <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 6, right: 8, left: -10, bottom: 4 }}>
-            <CartesianGrid {...GRID} vertical />
-            <XAxis type="number" dataKey="x" name={rx.names.secondary} domain={stats.x} allowDataOverflow tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} tickCount={6} />
-            <YAxis type="number" dataKey="y" name={rx.names.primary} domain={stats.y} allowDataOverflow tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} width={42} tickCount={6} />
-            <ZAxis range={[14, 14]} />
-            <Tooltip
-              cursor={{ strokeDasharray: "3 3", stroke: "#8a918b" }}
-              content={({ active, payload }) => {
-                const p = active && payload?.[0]?.payload;
-                if (!p) return null;
-                return <TipBox swatch={zoneColor(p.zone, zc)} title={`Cell ${p.id} · Zone ${p.zone}`} rows={[[rx.names.primary, p.y.toFixed(3)], [rx.names.secondary, p.x.toFixed(3)], ["Area", `${p.area.toFixed(2)} ac`]]} />;
-              }}
-            />
-            {series.map((s) => (
-              <Scatter
-                key={s.zone}
-                data={s.points}
-                fill={zoneColor(s.zone, zc)}
-                fillOpacity={!zoneFilter.length || zoneFilter.includes(s.zone) ? 0.75 : 0.08}
-                isAnimationActive={false}
-                onMouseEnter={(d) => {
-                  const id = (d.payload as { id?: number } | undefined)?.id;
-                  if (id !== undefined) useApp.setState({ hoveredCell: id });
-                }}
-                onMouseLeave={() => useApp.setState({ hoveredCell: null })}
-                onClick={(d) => {
-                  const id = (d.payload as { id?: number } | undefined)?.id;
-                  if (id !== undefined) useApp.setState({ inspectedCell: id });
-                }}
-                shape={(props: { cx?: number; cy?: number; payload?: { filled: boolean }; fill?: string; fillOpacity?: number }) => (
-                  <circle
-                    cx={props.cx}
-                    cy={props.cy}
-                    r={3.2}
-                    fill={props.payload?.filled ? "#fff" : props.fill}
-                    fillOpacity={props.fillOpacity}
-                    stroke={props.fill}
-                    strokeWidth={props.payload?.filled ? 1.2 : 0}
-                    className="cursor-pointer"
-                  />
-                )}
-              />
-            ))}
-          </ScatterChart>
         </ResponsiveContainer>
       </div>
     </ChartCard>

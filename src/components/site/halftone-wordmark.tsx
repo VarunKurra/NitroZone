@@ -31,7 +31,7 @@ export function HalftoneWordmark({ text = "NITROZONE", color = "#15653d", classN
       off.width = canvas.width;
       off.height = canvas.height;
       const o = off.getContext("2d")!;
-      const family = getComputedStyle(document.documentElement).getPropertyValue("--font-bricolage").trim() || "sans-serif";
+      const family = getComputedStyle(document.documentElement).getPropertyValue("--font-jakarta").trim() || "sans-serif";
       o.fillStyle = "#000";
       o.textBaseline = "alphabetic";
       o.font = `800 ${fontPx * dpr}px ${family}, sans-serif`;

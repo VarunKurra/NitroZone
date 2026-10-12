@@ -84,7 +84,7 @@ export function ImageryStep() {
 
         {source === "satellite" ? (
           <PanelSection
-            title="Sentinel-2 scenes"
+            title="Satellite photos"
             aside={
               !isDemo && (
                 <Select value={String(year)} onValueChange={(v) => setYear(Number(v))}>
@@ -105,16 +105,16 @@ export function ImageryStep() {
             {!window_.inSeason && !isDemo && (
               <p className="flex items-start gap-2 rounded-xl bg-harvest-50 px-3 py-2.5 text-xs leading-relaxed text-harvest-700">
                 <CloudSun className="mt-px size-4 shrink-0" />
-                Out of season right now, so NitroZone is showing the most recent sidedress window. Satellite indices need a living canopy.
+                It&apos;s not growing season, so these photos are from last summer.
               </p>
             )}
             {isDemo && (
               <div className="flex items-center justify-between gap-3 rounded-xl border bg-white px-3 py-2.5">
                 <div>
                   <Label htmlFor="bundled" className="text-sm font-medium">
-                    Use bundled copy
+                    Load instantly
                   </Label>
-                  <p className="text-xs text-muted-foreground">Same real scene, loads instantly and offline.</p>
+                  <p className="text-xs text-muted-foreground">Same photo, saved with the app. Works offline.</p>
                 </div>
                 <Switch id="bundled" checked={useBundled || presentation} disabled={presentation} onCheckedChange={setUseBundled} />
               </div>
@@ -127,11 +127,11 @@ export function ImageryStep() {
               </div>
             ) : scenes.isError ? (
               <EmptyNote icon={<AlertTriangle className="size-4" />} tone="warn">
-                Couldn&apos;t reach the satellite catalog. {isDemo ? "The bundled demo scene will be used." : "NitroZone will fall back to a clearly labeled synthetic raster so you can still try the workflow."}
+                Couldn&apos;t reach the satellite service. {isDemo ? "We'll use the saved photo." : "We'll use practice data so you can still try it."}
               </EmptyNote>
             ) : !scenes.data?.length ? (
               <EmptyNote icon={<CloudSun className="size-4" />}>
-                No scenes under 40% cloud cover over this field in that window. Try another season{isDemo ? "" : " above"}.
+                No clear photos for this field in that window. Try another year{isDemo ? "" : " above"}.
               </EmptyNote>
             ) : (
               <div className="grid max-h-[300px] grid-cols-2 gap-2 overflow-y-auto pr-0.5 scrollbar-thin" role="radiogroup" aria-label="Satellite scene">
@@ -155,11 +155,11 @@ export function ImageryStep() {
                       )}
                       <div className="px-2.5 py-2">
                         <div className="text-[0.8rem] font-semibold tabular">{fmtDate(s.datetime)}</div>
-                        <div className="text-[0.7rem] text-muted-foreground tabular">{s.cloudCover.toFixed(1)}% cloud (scene)</div>
+                        <div className="text-[0.7rem] text-muted-foreground tabular">{s.cloudCover.toFixed(0)}% cloudy</div>
                       </div>
                       {recommended === s.id && (
                         <span className="absolute left-1.5 top-1.5 rounded-md bg-white/95 px-1.5 py-0.5 text-[0.62rem] font-semibold text-primary shadow-sm">
-                          {isDemo ? "Demo scene" : "Recommended"}
+                          {isDemo ? "Demo photo" : "Best pick"}
                         </span>
                       )}
                     </button>
@@ -172,14 +172,12 @@ export function ImageryStep() {
           <DroneUpload />
         )}
 
-        <PanelSection title="N-rich reference strip (optional)">
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            A strip that got 50 to 100% extra nitrogen early in the season shows what corn looks like when N is not limiting. NitroZone compares every zone to it (the <strong className="font-semibold text-foreground">sufficiency index</strong>). Without one, the best 5% of the field is used as the reference.
-          </p>
+        <PanelSection title="Extra-fertilizer strip (optional)">
+          <p className="text-sm leading-relaxed text-muted-foreground">If part of your field got extra fertilizer this year, draw it here and we&apos;ll compare the rest of the field to it.</p>
           {reference ? (
             <div className="flex items-center justify-between rounded-xl border border-harvest-200 bg-harvest-50 px-3 py-2.5 text-sm">
               <span className="flex items-center gap-2 font-medium text-harvest-700">
-                <Sprout className="size-4" /> Reference strip added
+                <Sprout className="size-4" /> Strip added
               </span>
               <Button size="sm" variant="ghost" onClick={() => useApp.setState({ reference: null })}>
                 <Trash2 /> Remove
@@ -188,11 +186,11 @@ export function ImageryStep() {
           ) : (
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => useApp.setState({ drawMode: "draw-strip" })}>
-                <ScanLine /> Draw strip on map
+                <ScanLine /> Draw it on the map
               </Button>
               {isDemo && (
                 <Button size="sm" variant="ghost" onClick={() => useApp.setState({ reference: DEMO_REFERENCE_STRIP })}>
-                  Add example strip
+                  Add an example
                 </Button>
               )}
             </div>
@@ -203,7 +201,7 @@ export function ImageryStep() {
           <AccordionItem value="adv" className="border-none">
             <AccordionTrigger className="py-3 text-sm font-semibold hover:no-underline">
               <span className="flex items-center gap-2">
-                <Ruler className="size-4 text-muted-foreground" /> Zoning settings
+                <Ruler className="size-4 text-muted-foreground" /> Zone settings
               </span>
             </AccordionTrigger>
             <AccordionContent className="space-y-5 pb-4">
@@ -212,7 +210,7 @@ export function ImageryStep() {
           </AccordionItem>
         </Accordion>
         <p className="text-xs text-muted-foreground" data-dev-only>
-          {settings.zoneCount} zones · {settings.cellSizeM} m grid · merge &lt; {settings.minZoneAc} ac · {settings.edgeBufferM} m edge buffer
+          {settings.zoneCount} zones · {settings.cellSizeM} m squares
         </p>
       </div>
       <div className="flex gap-2 border-t bg-white/80 px-5 py-4">
@@ -220,7 +218,7 @@ export function ImageryStep() {
           <ArrowLeft />
         </Button>
         <Button size="xl" className="flex-1" disabled={!canAnalyze || running} onClick={() => runAnalysis({ useBundled: useBundled || presentation })} data-testid="analyze">
-          {running ? <Loader2 className="animate-spin" /> : <Satellite />} {running ? "Analyzing…" : "Analyze field"}
+          {running ? <Loader2 className="animate-spin" /> : <Satellite />} {running ? "Checking…" : "Check my field"}
         </Button>
       </div>
     </div>
@@ -243,7 +241,7 @@ export function ZoningSettings() {
         </ToggleGroup>
       </div>
       <div className="space-y-2">
-        <Label className="text-sm font-medium">Grid cell size</Label>
+        <Label className="text-sm font-medium">Detail level</Label>
         <ToggleGroup type="single" value={String(s.cellSizeM)} onValueChange={(v) => v && set({ cellSizeM: Number(v) })} className="grid w-full grid-cols-3 rounded-lg bg-muted p-1" aria-label="Grid cell size">
           {[10, 20, 30].map((n) => (
             <ToggleGroupItem key={n} value={String(n)} className="h-8 rounded-md data-[state=on]:bg-white data-[state=on]:shadow-sm">
@@ -251,16 +249,16 @@ export function ZoningSettings() {
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <p className="text-xs text-muted-foreground">Match roughly to your applicator&apos;s section or boom width.</p>
+        <p className="text-xs text-muted-foreground">Smaller squares = more detail. Match your spreader width.</p>
       </div>
-      <SliderRow label="Merge zones smaller than" value={s.minZoneAc} min={0} max={3} step={0.25} unit="ac" onChange={(v) => set({ minZoneAc: v })} hint="Tiny islands can't be applied accurately by a moving spreader." />
-      <SliderRow label="Ignore pixels near the edge" value={s.edgeBufferM} min={0} max={20} step={1} unit="m" onChange={(v) => set({ edgeBufferM: v })} hint="Edge pixels mix crop with roads, ditches and fence rows." />
+      <SliderRow label="Smallest zone" value={s.minZoneAc} min={0} max={3} step={0.25} unit="acres" onChange={(v) => set({ minZoneAc: v })} />
+      <SliderRow label="Skip field edges" value={s.edgeBufferM} min={0} max={20} step={1} unit="m" onChange={(v) => set({ edgeBufferM: v })} />
       <div className="flex items-center justify-between">
         <div>
           <Label htmlFor="smooth" className="text-sm font-medium">
-            Smooth speckle
+            Smooth out zones
           </Label>
-          <p className="text-xs text-muted-foreground">3 × 3 majority filter before merging.</p>
+
         </div>
         <Switch id="smooth" checked={s.smooth} onCheckedChange={(v) => set({ smooth: v })} />
       </div>
@@ -330,13 +328,11 @@ function DroneUpload() {
         className={cn("flex w-full flex-col items-center rounded-2xl border-2 border-dashed px-4 py-7 text-center transition", drag ? "border-primary bg-field-50" : "border-border bg-white hover:border-field-300")}
       >
         <ImageUp className="size-7 text-primary" />
-        <span className="mt-2 font-semibold">{drone ? drone.name : "Drop an orthomosaic or photo"}</span>
-        <span className="mt-1 text-xs text-muted-foreground">{drone ? `${(drone.size / 1e6).toFixed(1)} MB · click to replace` : "GeoTIFF (best), JPG or PNG"}</span>
+        <span className="mt-2 font-semibold">{drone ? drone.name : "Drop your drone photo here"}</span>
+        <span className="mt-1 text-xs text-muted-foreground">{drone ? `${(drone.size / 1e6).toFixed(1)} MB · click to replace` : "Map image (GeoTIFF), JPG or PNG"}</span>
       </button>
       <input ref={ref} type="file" accept=".tif,.tiff,image/tiff,image/jpeg,image/png" className="sr-only" aria-label="Upload drone image" onChange={(e) => e.target.files?.[0] && accept(e.target.files[0])} />
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        RGB cameras have no near-infrared or red-edge band, so NitroZone uses <strong className="font-medium text-foreground">VARI</strong> = (G − R) / (G + R − B) and <strong className="font-medium text-foreground">ExG</strong> = 2G − R − B. They track greenness well but are less specific to nitrogen than satellite NDRE.
-      </p>
+
     </PanelSection>
   );
 }

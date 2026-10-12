@@ -97,9 +97,9 @@ export function InsightsCard() {
             <Sparkles className="size-4" />
           </span>
           <div>
-            <h3 className="font-display text-[1.02rem] font-semibold">Field insights</h3>
+            <h3 className="font-display text-[1.02rem] font-semibold">What this means for your field</h3>
             <p className="text-xs text-muted-foreground" aria-live="polite">
-              {status === "loading" ? "Writing a plain-English summary…" : status === "ai" ? "AI summary (Google Gemini) of the numbers on this page" : q.data?.reason === "not-configured" ? "Rule-based summary (AI not configured)" : "Rule-based summary"}
+              {status === "loading" ? "Writing a summary…" : status === "ai" ? "Summary written by AI (Google Gemini)" : "Summary"}
             </p>
           </div>
         </div>
@@ -121,7 +121,7 @@ export function InsightsCard() {
 
       <div className="mt-4 border-t pt-4">
         <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-          <MessageSquareText className="size-3.5" /> Explain a zone
+          <MessageSquareText className="size-3.5" /> Tell me about a zone
         </div>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {Array.from({ length: zc }, (_, i) => i + 1).map((z) => (
@@ -167,9 +167,8 @@ function ZoneFallback({ zone }: { zone: number }) {
   const adj = Math.round(z.adjustment * 100);
   return (
     <>
-      Zone {zone} ({zoneLabel(zone, zc).toLowerCase()}) covers {z.areaAc.toFixed(1)} ac with an average {rx.names.primary} of {z.primary.toFixed(3)}, which is {Math.round(z.sufficiency * 100)}% of the reference. It gets {z.rateLbAc.toFixed(0)} lb N/ac (
-      {adj > 0 ? `+${adj}%` : `${adj}%`} vs your base rate).{" "}
-      {z.sufficiency < 0.95 ? "More than 5% below the reference can mean nitrogen stress, but check for wet spots, compaction or stand problems before adding N." : "At or above the reference: this part of the field looks well supplied."}
+      Zone {zone} ({zoneLabel(zone, zc).toLowerCase()}) covers {z.areaAc.toFixed(0)} acres. Its crop is {Math.round(z.sufficiency * 100)}% as healthy as the best part of the field, so it gets {z.rateLbAc.toFixed(0)} lb per acre ({adj > 0 ? `${adj}% more` : `${Math.abs(adj)}% less`} than usual).{" "}
+      {z.sufficiency < 0.95 ? "Check it in person: wet soil or pests can look the same from space." : "It looks healthy."}
     </>
   );
 }

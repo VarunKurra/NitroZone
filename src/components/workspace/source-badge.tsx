@@ -3,10 +3,10 @@ import type { SceneInfo } from "@/lib/agronomy/types";
 import { cn } from "@/lib/utils";
 
 const META = {
-  live: { icon: Satellite, label: "Live Sentinel-2", cls: "bg-field-50 text-field-800 border-field-200" },
-  cached: { icon: Database, label: "Sentinel-2 (bundled copy)", cls: "bg-river-50 text-river-700 border-river-100" },
-  synthetic: { icon: FlaskConical, label: "Synthetic demo raster", cls: "bg-harvest-50 text-harvest-700 border-harvest-200" },
-  drone: { icon: Drone, label: "Drone image (RGB)", cls: "bg-field-50 text-field-800 border-field-200" },
+  live: { icon: Satellite, label: "Satellite photo", cls: "bg-field-50 text-field-800 border-field-200" },
+  cached: { icon: Database, label: "Satellite photo (saved copy)", cls: "bg-river-50 text-river-700 border-river-100" },
+  synthetic: { icon: FlaskConical, label: "Practice data (not real)", cls: "bg-harvest-50 text-harvest-700 border-harvest-200" },
+  drone: { icon: Drone, label: "Drone photo", cls: "bg-field-50 text-field-800 border-field-200" },
 } as const;
 
 /** Always-visible label of which imagery the numbers came from. */
@@ -27,7 +27,7 @@ export function SourceBadge({ scene, fallbackReason, clearFraction, compact }: {
         <Icon className="size-4" /> {m.label}
       </div>
       <div className="mt-1 text-xs opacity-80 tabular">
-        {[date && `Acquired ${date}`, scene.sceneCloudPct !== null && `${scene.sceneCloudPct.toFixed(1)}% scene cloud`, clearFraction !== undefined && `${Math.round(clearFraction * 100)}% of field clear`].filter(Boolean).join(" · ")}
+        {[date && `Taken ${date}`, clearFraction !== undefined && `${Math.round(clearFraction * 100)}% of field clear`].filter(Boolean).join(" · ")}
       </div>
       {fallbackReason && (
         <p className="mt-2 flex items-start gap-1.5 text-xs font-medium">

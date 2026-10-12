@@ -68,7 +68,7 @@ export function DownloadMenu({ size = "lg", className }: { size?: "lg" | "xl" | 
     <div className={cn("flex", className)}>
       <Button size={size} className="rounded-r-none pr-3.5" disabled={!generated || busy !== null} onClick={() => go("bundle")} data-testid="download-all">
         {busy === "bundle" ? <Loader2 className="animate-spin" /> : done ? <Check /> : <Download />}
-        {done ? "Downloaded" : "Download prescription"}
+        {done ? "Downloaded" : "Download plan"}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

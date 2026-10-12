@@ -42,9 +42,9 @@ export function ZoneEditor() {
     <section className="rounded-2xl border bg-white p-4 shadow-[var(--shadow-soft)] sm:p-5" aria-label="Review and edit zones">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-display text-[1.02rem] font-semibold">Review &amp; edit zones</h3>
+          <h3 className="font-display text-[1.02rem] font-semibold">Fix anything that looks wrong</h3>
           <p className="mt-1 text-[0.84rem] leading-snug text-muted-foreground">
-            Know a wet spot, a waterway or an old fence line? Pick a zone, then click or drag over cells on the map to reassign them.
+            You know your field best. Pick a zone, then click or drag on the map to repaint it.
           </p>
         </div>
         {edits > 0 && <span className="shrink-0 rounded-full bg-harvest-50 px-2 py-0.5 text-xs font-semibold text-harvest-700 tabular">{edits} edited</span>}
@@ -84,7 +84,7 @@ export function ZoneEditor() {
           <Redo2 /> Redo
         </Button>
         <Button size="sm" variant="ghost" onClick={resetEdits} disabled={!edits}>
-          <RotateCcw /> Reset to computed zones
+          <RotateCcw /> Start over
         </Button>
         <span className="ml-auto hidden text-xs text-muted-foreground lg:inline" data-dev-only>
           <Kbd>1</Kbd>–<Kbd>{zc}</Kbd> brush · <Kbd>Esc</Kbd> stop · <Kbd>⌘Z</Kbd> undo

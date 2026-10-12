@@ -8,12 +8,12 @@ import type { ProgressStep } from "@/lib/worker/protocol";
 import { cn } from "@/lib/utils";
 
 const STEPS: { key: ProgressStep; label: string }[] = [
-  { key: "search", label: "Preparing the field" },
-  { key: "download", label: "Fetching imagery" },
-  { key: "mask", label: "Masking clouds & shadows" },
-  { key: "indices", label: "Computing vegetation indices" },
-  { key: "grid", label: "Building the prescription grid" },
-  { key: "zones", label: "Clustering management zones" },
+  { key: "search", label: "Getting ready" },
+  { key: "download", label: "Downloading the satellite photo" },
+  { key: "mask", label: "Removing clouds" },
+  { key: "indices", label: "Measuring crop health" },
+  { key: "grid", label: "Splitting the field into squares" },
+  { key: "zones", label: "Grouping into zones" },
 ];
 
 /** Full-map "satellite scan" while analysis runs: sweeping scan line + live step list. */
@@ -54,7 +54,7 @@ export function AnalysisOverlay() {
                 </>
               ) : (
                 <>
-                  <div className="font-display text-lg font-semibold">Analyzing your field</div>
+                  <div className="font-display text-lg font-semibold">Checking your field</div>
                   <p className="mt-0.5 min-h-5 text-sm text-muted-foreground">{latest?.message}</p>
                   <ol className="mt-4 space-y-2.5">
                     {STEPS.map((s, i) => {

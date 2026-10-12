@@ -26,7 +26,7 @@ const TOC = [
 
 function H2({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="scroll-mt-24 font-display text-[1.75rem] font-bold tracking-[-0.025em]">
+    <h2 id={id} className="scroll-mt-24 font-display text-[1.75rem] font-bold tracking-[-0.02em]">
       {children}
     </h2>
   );
@@ -52,7 +52,7 @@ export default function SciencePage() {
       <main id="main" className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8">
         <header className="max-w-3xl">
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.16em] text-primary">Methodology</p>
-          <h1 className="mt-3 font-display text-[2.6rem] font-bold leading-[1.05] tracking-[-0.035em] sm:text-[3.4rem]">The science behind NitroZone</h1>
+          <h1 className="mt-3 font-display text-[2.6rem] font-bold leading-[1.05] tracking-[-0.02em] sm:text-[3.4rem]">The science behind NitroZone</h1>
           <p className="mt-5 text-[1.1rem] leading-relaxed text-muted-foreground">
             Every number in NitroZone comes from the steps on this page. The same formulas appear inside the app with your own numbers filled in.
           </p>

@@ -20,7 +20,7 @@ const H = hero as unknown as HeroData;
 
 const STAGES = [
   { label: "Some spots struggle. Some thrive.", hold: 3500 },
-  { label: "NitroZone maps what each spot needs", hold: 4500 },
+  { label: "NitroZone maps what each spot needs", hold: 6500 },
   { label: "Healthy crops, less waste", hold: 4500 },
 ];
 
@@ -71,7 +71,7 @@ export function HeroStory() {
                 <path d={ring(H.outline)} />
               </clipPath>
               <clipPath id="hs-sweep">
-                <rect x="0" y="0" width={H.width} height={H.height} className={cn("origin-top transition-transform ease-out", stage === 1 ? "scale-y-100 duration-[1800ms] delay-500" : "scale-y-0 duration-0")} style={{ transformBox: "fill-box" }} />
+                <rect x="0" y="0" width={H.width} height={H.height} className={cn("origin-top transition-transform ease-out", stage === 1 ? "scale-y-100 duration-[2600ms] delay-500" : "scale-y-0 duration-0")} style={{ transformBox: "fill-box" }} />
               </clipPath>
             </defs>
             <image href="/demo/hero-tci.png" width={H.width} height={H.height} preserveAspectRatio="none" />

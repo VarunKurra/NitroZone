@@ -32,7 +32,10 @@ export const DEFAULT_RATE_SETTINGS: RateSettings = {
   maxRate: 250,
 };
 
-/** Sufficiency index threshold: below ~95% of a well-fertilized reference suggests N deficiency. */
+/**
+ * Sufficiency-index threshold. Cells with SI >= 0.95 are "within 5% of the reference". SI research
+ * (e.g. Varvel et al. 2007, Agron. J. 99:701-706) computes in-season N needs from SI values around 0.90-0.95.
+ */
 export const SI_SUFFICIENT = 0.95;
 
 export function zoneRate(settings: RateSettings, zone: number): number {

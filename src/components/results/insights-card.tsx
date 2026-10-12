@@ -169,7 +169,7 @@ function ZoneFallback({ zone }: { zone: number }) {
     <>
       Zone {zone} ({zoneLabel(zone, zc).toLowerCase()}) covers {z.areaAc.toFixed(1)} ac with an average {rx.names.primary} of {z.primary.toFixed(3)}, which is {Math.round(z.sufficiency * 100)}% of the reference. It gets {z.rateLbAc.toFixed(0)} lb N/ac (
       {adj > 0 ? `+${adj}%` : `${adj}%`} vs your base rate).{" "}
-      {z.sufficiency < 0.95 ? "Below 95% of the reference usually points to N stress, but check for wet spots, compaction or stand problems before adding N." : "At or above the reference: this part of the field looks well supplied."}
+      {z.sufficiency < 0.95 ? "More than 5% below the reference can mean nitrogen stress, but check for wet spots, compaction or stand problems before adding N." : "At or above the reference: this part of the field looks well supplied."}
     </>
   );
 }

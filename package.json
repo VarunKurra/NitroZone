@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "postinstall": "node scripts/copy-maplibre-worker.mjs",
-    "gen:hero": "vitest run --config vitest.scripts.mts && sips -s format png scripts/hero/hero-tci.ppm --out public/demo/hero-tci.png >/dev/null && rm scripts/hero/hero-tci.ppm"
+    "gen:hero": "vitest run --config vitest.scripts.mts && sips -s format png scripts/hero/hero-tci.ppm --out public/demo/hero-tci.png >/dev/null && rm scripts/hero/hero-tci.ppm",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@mapbox/shp-write": "^0.4.3",

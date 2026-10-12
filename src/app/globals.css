@@ -217,6 +217,16 @@
   }
 }
 
+/* Landing hero: zone cells sweep in (CSS, so 2,000+ cells stay cheap). */
+.hero-cell {
+  opacity: 0;
+  animation: hero-cell 0.5s ease-out both;
+}
+@keyframes hero-cell {
+  from { opacity: 0; }
+  to { opacity: 0.82; }
+}
+
 /* Presentation mode: bigger type, hides developer-only UI (see components/present). */
 html.present {
   font-size: 17.5px;

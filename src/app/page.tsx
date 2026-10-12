@@ -1,9 +1,22 @@
-import Link from "next/link";
+import { SiteNav } from "@/components/landing/site-nav";
+import { Faq, Features, FinalCta, Hero, HowItWorks, Problem, Science, SourcesStrip } from "@/components/landing/sections";
+import { SiteFooter } from "@/components/site/site-footer";
 
 export default function Home() {
   return (
-    <main id="main" className="p-10">
-      <Link href="/app">Open app</Link>
-    </main>
+    <>
+      <SiteNav />
+      <main id="main">
+        <Hero />
+        <SourcesStrip />
+        <Problem />
+        <HowItWorks />
+        <Features />
+        <Science />
+        <Faq />
+        <FinalCta />
+      </main>
+      <SiteFooter />
+    </>
   );
 }

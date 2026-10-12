@@ -82,7 +82,7 @@ export function VigorHistogram() {
       question="How is crop vigor spread across the field?"
       answer={
         <>
-          Acres in each {name} band, colored by the zone most of those acres belong to. <strong className="font-medium text-foreground">Click a bar</strong> to highlight those cells on the map.
+          Acres (y) in each {name} band (x), colored by the zone most of those acres belong to. <strong className="font-medium text-foreground">Click a bar</strong> to highlight those cells on the map.
         </>
       }
       actions={
@@ -113,7 +113,7 @@ export function VigorHistogram() {
           <BarChart data={bins} margin={{ top: 6, right: 6, left: -14, bottom: 0 }} barCategoryGap={2}>
             <CartesianGrid {...GRID} />
             <XAxis dataKey="mid" type="number" domain={["dataMin", "dataMax"]} tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} tickCount={6} />
-            <YAxis {...AXIS} tickFormatter={(v: number) => `${v.toFixed(0)}`} width={44} label={{ value: "acres", angle: -90, position: "insideLeft", offset: 22, fontSize: 10, fill: "#8a918b" }} />
+            <YAxis {...AXIS} tickFormatter={(v: number) => `${v.toFixed(0)}`} width={40} />
             <Tooltip
               cursor={{ fill: "rgb(20 32 26 / 0.04)" }}
               content={({ active: a, payload }) => {
@@ -377,7 +377,27 @@ export function VigorScatter() {
         .filter((p) => p.zone === k + 1 && Number.isFinite(p.x) && Number.isFinite(p.y)),
     }));
   }, [analysis, rx, zc]);
-  if (!analysis || !rx) return null;
+  const stats = useMemo(() => {
+    if (!analysis) return null;
+    const pts = analysis.cells.filter((c) => Number.isFinite(c.primary) && Number.isFinite(c.secondary));
+    if (pts.length < 10) return null;
+    const xs = pts.map((p) => p.secondary);
+    const ys = pts.map((p) => p.primary);
+    const pad = (lo: number, hi: number) => [Math.floor((lo - (hi - lo) * 0.05) * 50) / 50, Math.ceil((hi + (hi - lo) * 0.05) * 50) / 50];
+    // Among the greenest half of cells (by the secondary index), compare relative spread (CV).
+    const medX = percentile(xs, 50);
+    const top = pts.filter((p) => p.secondary >= medX);
+    const cv = (v: number[]) => {
+      const m = v.reduce((a, b) => a + b, 0) / v.length;
+      return Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length) / Math.abs(m);
+    };
+    return {
+      x: pad(percentile(xs, 0.5), percentile(xs, 99.5)) as [number, number],
+      y: pad(percentile(ys, 0.5), percentile(ys, 99.5)) as [number, number],
+      ratio: cv(top.map((p) => p.primary)) / (cv(top.map((p) => p.secondary)) || 1),
+    };
+  }, [analysis]);
+  if (!analysis || !rx || !stats) return null;
   const isS2 = analysis.scene.sensor === "sentinel2";
   return (
     <ChartCard
@@ -386,8 +406,8 @@ export function VigorScatter() {
       question={isS2 ? "Is the red-edge signal adding information?" : "Do the two drone indices agree?"}
       answer={
         isS2
-          ? "Each dot is a grid cell. Where NDVI bunches up near its ceiling, NDRE still spreads cells apart. That's why NitroZone zones on NDRE."
-          : "Each dot is a grid cell. Cells where VARI and ExG disagree deserve a look in the field."
+          ? `Each dot is a grid cell (x: NDVI, y: NDRE). In the greenest half of the field, NDRE varies ${stats.ratio.toFixed(1)}× more than NDVI, so it can still separate cells after NDVI saturates. That's why zones are built on NDRE.`
+          : "Each dot is a grid cell (x: ExG, y: VARI). Cells where the two indices disagree deserve a look in the field."
       }
       footnote={<>Hover a dot to find that cell on the map; click to inspect it. Hollow dots were gap-filled under cloud.</>}
     >
@@ -402,8 +422,8 @@ export function VigorScatter() {
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart margin={{ top: 6, right: 8, left: -10, bottom: 4 }}>
             <CartesianGrid {...GRID} vertical />
-            <XAxis type="number" dataKey="x" name={rx.names.secondary} domain={["auto", "auto"]} tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} label={{ value: rx.names.secondary, position: "insideBottomRight", offset: -2, fontSize: 10, fill: "#8a918b" }} />
-            <YAxis type="number" dataKey="y" name={rx.names.primary} domain={["auto", "auto"]} tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} width={46} label={{ value: rx.names.primary, angle: -90, position: "insideLeft", offset: 20, fontSize: 10, fill: "#8a918b" }} />
+            <XAxis type="number" dataKey="x" name={rx.names.secondary} domain={stats.x} allowDataOverflow tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} tickCount={6} />
+            <YAxis type="number" dataKey="y" name={rx.names.primary} domain={stats.y} allowDataOverflow tickFormatter={(v: number) => v.toFixed(2)} {...AXIS} width={42} tickCount={6} />
             <ZAxis range={[14, 14]} />
             <Tooltip
               cursor={{ strokeDasharray: "3 3", stroke: "#8a918b" }}

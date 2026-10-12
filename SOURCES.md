@@ -21,3 +21,12 @@ All numbers on the results screen (acres, rates, savings, health score, etc.) ar
 ## TODO-VERIFY (not shown in the UI)
 - Exact equation and ΔSI coefficient of the Holland & Schepers (2010) variable-rate N model (Agron. J. 102:1415–1424). I couldn't read the primary paper, so NitroZone uses its own clearly labeled heuristic instead.
 - Final 2025 Missouri corn **planted** acreage (only the March intentions figure is used).
+
+## Photos
+All photos are from Unsplash and used under the [Unsplash License](https://unsplash.com/license) (free to use, no permission needed). Credited with thanks:
+- `public/images/farmer-checking-field.jpg`: [Mihajlo Sivč](https://unsplash.com/photos/man-in-blue-shirt-examining-wheat-field-yCw2Sso7PV4)
+- `public/images/farmer-thriving-corn.jpg`: [Erik](https://unsplash.com/photos/woman-in-blue-long-sleeve-shirt-wearing-brown-hat-standing-in-corn-field-during-daytime-oHSmhHK-BB0)
+- `public/images/farmer-fence-sunrise.jpg`: [Portraits of Modern Dairy](https://unsplash.com/photos/woman-leaning-on-a-farm-fence-at-sunrise-7AdnJ27e8qE)
+- `public/images/farmer-in-corn.jpg`: [Cullen Jones](https://unsplash.com/photos/man-in-black-long-sleeve-shirt-standing-beside-corn-plant-during-daytime-nL50wbTpLhM)
+
+The homepage "24 lb" figure comes from the University of Missouri corn study listed above; the "66%" figure is the USGS cultivated-crops share.

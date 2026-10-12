@@ -61,7 +61,7 @@ export function FieldStep() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-6 pt-5 scrollbar-thin">
-        <StepHeader index={1} title="Find your corn field" description="Search for your farm, then trace the field edge on the satellite map. Or start with a real Missouri demo field." />
+        <StepHeader index={1} title="Find your field" description="Search for your farm, then click around the edges of your field on the map. Or try a real Missouri field." />
 
         <AddressSearch />
 
@@ -69,7 +69,7 @@ export function FieldStep() {
           <div className="grid gap-3">
             <OptionCard
               icon={<PenLine className="size-5" />}
-              title="Draw my field"
+              title="Outline my field"
               text="Click the corners of your field on the map."
               onClick={() => useApp.setState({ drawMode: "draw-field" })}
               primary
@@ -77,11 +77,11 @@ export function FieldStep() {
             <OptionCard
               icon={<Sparkles className="size-5" />}
               title="Use the demo field"
-              text="193 ac of corn in Audrain County, MO, with a real Sentinel-2 image from July 1, 2025."
+              text="A real 193-acre field in Audrain County, Missouri, with a real satellite photo from July 2025."
               onClick={loadDemoField}
               testId="load-demo"
             />
-            <OptionCard icon={<FileUp className="size-5" />} title="Import a boundary" text="Shapefile (.zip), KML or GeoJSON from your farm software." onClick={() => fileRef.current?.click()} />
+            <OptionCard icon={<FileUp className="size-5" />} title="Upload a field outline" text="Use a file from your farm software (shapefile, KML or GeoJSON)." onClick={() => fileRef.current?.click()} />
           </div>
         )}
         <input

@@ -14,9 +14,9 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: { default: "NitroZone: variable-rate nitrogen for Missouri corn", template: "%s | NitroZone" },
+  title: { default: "NitroZone: the right amount of fertilizer for every part of your field", template: "%s | NitroZone" },
   description:
-    "Draw your corn field, analyze Sentinel-2 red-edge imagery, and download a variable-rate nitrogen prescription for your sidedress controller. Free, open data.",
+    "NitroZone uses free satellite images to show farmers which parts of a field need more fertilizer and which need less, saving money and keeping our rivers cleaner.",
   applicationName: "NitroZone",
   keywords: ["variable rate nitrogen", "corn", "Missouri", "sidedress", "NDRE", "Sentinel-2", "prescription map", "precision agriculture"],
   icons: { icon: "/icon.svg" },
@@ -30,8 +30,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${bricolage.variable} h-full`}>
-      <body className="min-h-full flex flex-col">
+    // suppressHydrationWarning: browser extensions (Grammarly, page assistants) add attributes to <html>/<body>
+    // before React loads. This only silences attribute differences on these two elements.
+    <html lang="en" className={`${geist.variable} ${geistMono.variable} ${bricolage.variable} h-full`} suppressHydrationWarning>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground"

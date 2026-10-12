@@ -54,7 +54,7 @@ export default function SciencePage() {
           <p className="text-[0.75rem] font-semibold uppercase tracking-[0.16em] text-primary">Methodology</p>
           <h1 className="mt-3 font-display text-[2.6rem] font-bold leading-[1.05] tracking-[-0.035em] sm:text-[3.4rem]">The science behind NitroZone</h1>
           <p className="mt-5 text-[1.1rem] leading-relaxed text-muted-foreground">
-            Every number in the app comes from the steps on this page. Nothing is hidden: the same formulas appear inside the app with your own values plugged in, and the source code is open.
+            Every number in NitroZone comes from the steps on this page. The same formulas appear inside the app with your own numbers filled in.
           </p>
         </header>
 
@@ -76,7 +76,7 @@ export default function SciencePage() {
             <section>
               <H2 id="timing">When to use it</H2>
               <p className="mt-4">
-                NitroZone is built for <strong>corn</strong> (soybeans fix their own nitrogen) and for <strong>in-season sidedress</strong>, once the canopy is established, roughly V6 to V12. Earlier, bare soil between the rows dominates what the satellite sees. Iowa State University guidance for canopy sensing notes that corn N uptake becomes rapid around V8, and suggests sensing from about V10 and finishing before tasseling (VT), with high-clearance equipment for later applications (<Src href="https://www.agronext.iastate.edu/soilfertility/info/inseasonnstress.pdf">Iowa State, In-Season Sensing for Nitrogen Stress in Corn</Src>).
+                NitroZone is for crops that need nitrogen fertilizer during the season, like corn, wheat and sorghum, and it was built and tested on <strong>Missouri corn</strong> (legumes such as soybeans make their own nitrogen). It is designed for <strong>in-season sidedress</strong>, once the canopy is established, roughly V6 to V12. Earlier, bare soil between the rows dominates what the satellite sees. Iowa State University guidance for canopy sensing notes that corn N uptake becomes rapid around V8, and suggests sensing from about V10 and finishing before tasseling (VT), with high-clearance equipment for later applications (<Src href="https://www.agronext.iastate.edu/soilfertility/info/inseasonnstress.pdf">Iowa State, In-Season Sensing for Nitrogen Stress in Corn</Src>).
               </p>
             </section>
 

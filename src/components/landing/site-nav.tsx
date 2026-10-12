@@ -9,8 +9,8 @@ import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
+  { href: "/#why", label: "Why it matters" },
   { href: "/#how", label: "How it works" },
-  { href: "/#features", label: "Features" },
   { href: "/science", label: "The science" },
   { href: "/#faq", label: "FAQ" },
 ];
@@ -38,12 +38,9 @@ export function SiteNav() {
           </ul>
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
-          <a href="https://github.com/VarunKurra/NitroZone" target="_blank" rel="noreferrer" className="rounded-lg px-3 py-2 text-[0.9rem] font-medium text-foreground/70 hover:text-foreground">
-            GitHub
-          </a>
           <Button asChild size="lg" className="rounded-xl">
             <Link href="/app?demo=1">
-              Try the demo <ArrowRight />
+              Try it now <ArrowRight />
             </Link>
           </Button>
         </div>
@@ -64,7 +61,7 @@ export function SiteNav() {
               ))}
               <li className="pt-2">
                 <Button asChild size="xl" className="w-full">
-                  <Link href="/app?demo=1">Try the demo</Link>
+                  <Link href="/app?demo=1">Try it now</Link>
                 </Button>
               </li>
             </ul>

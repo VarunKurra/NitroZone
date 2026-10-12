@@ -1,5 +1,5 @@
 import { SiteNav } from "@/components/landing/site-nav";
-import { Faq, Features, FinalCta, Hero, HowItWorks, Problem, Science, SourcesStrip } from "@/components/landing/sections";
+import { Benefits, Faq, Hero, HowItWorks, Mission, WhyItMatters } from "@/components/landing/sections";
 import { SiteFooter } from "@/components/site/site-footer";
 
 export default function Home() {
@@ -8,13 +8,11 @@ export default function Home() {
       <SiteNav />
       <main id="main">
         <Hero />
-        <SourcesStrip />
-        <Problem />
+        <WhyItMatters />
         <HowItWorks />
-        <Features />
-        <Science />
+        <Benefits />
+        <Mission />
         <Faq />
-        <FinalCta />
       </main>
       <SiteFooter />
     </>

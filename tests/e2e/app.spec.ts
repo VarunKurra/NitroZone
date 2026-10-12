@@ -21,8 +21,8 @@ async function runDemoToResults(page: Page) {
 test.describe("landing", () => {
   test("renders hero, sourced stats and footer; CTA opens the demo", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Nitrogen only where your corn");
-    await expect(page.getByText("Source: USGS SPARROW")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Give every part of your field");
+    await expect(page.getByText("Source: USGS")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
     await page.getByTestId("hero-demo").click();
     await expect(page).toHaveURL(/\/app\?demo=1/);

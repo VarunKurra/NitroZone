@@ -65,7 +65,7 @@ export function ImageryStep() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-6 pt-5 scrollbar-thin">
-        <StepHeader index={2} title="Choose the imagery" description="NitroZone reads crop vigor from the red-edge band. Use a clear in-season image (about V8 to V12) once the canopy covers the rows." />
+        <StepHeader index={2} title="Pick a satellite photo" description="NitroZone reads how green and healthy your crop is. Pick a clear photo from mid-season, once the crop covers the ground." />
 
         <ToggleGroup
           type="single"

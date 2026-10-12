@@ -12,8 +12,8 @@
     <path d="M19 46V19L45 45V18" fill="none" stroke="#fff" stroke-width="6.2" stroke-linecap="round" stroke-linejoin="round"/>
     <circle cx="48.8" cy="15.2" r="5.2" fill="#f2b14a"/>
     <text x="88" y="48" font-family="Bricolage Grotesque, Helvetica, Arial, sans-serif" font-size="46" font-weight="800" fill="#ffffff" letter-spacing="-1.5">Nitro<tspan fill="#95c6a2">Zone</tspan></text>
-    <text x="0" y="128" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="-0.8">Nitrogen only where your corn needs it.</text>
-    <text x="0" y="172" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#ffffff" fill-opacity="0.7">Sentinel-2 red-edge imagery → management zones → variable-rate sidedress prescription for Missouri corn</text>
+    <text x="0" y="128" font-family="Helvetica, Arial, sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="-0.8">Give every part of your field just what it needs.</text>
+    <text x="0" y="172" font-family="Helvetica, Arial, sans-serif" font-size="19" fill="#ffffff" fill-opacity="0.7">Free satellite photos → a fertilizer plan for every part of the field → healthier crops, cleaner rivers</text>
   </g>
   <g transform="translate(1000,60)">
     <g fill-opacity="0.92">

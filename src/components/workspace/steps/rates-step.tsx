@@ -30,7 +30,7 @@ export function RatesStep() {
   return (
     <div className="flex h-full flex-col">
       <div className="flex-1 space-y-6 overflow-y-auto px-5 pb-6 pt-5 scrollbar-thin">
-        <StepHeader index={3} title="Set your nitrogen rates" description="Start from your planned flat sidedress rate. Each zone gets that rate adjusted up or down. Every number updates live." />
+        <StepHeader index={3} title="Set your fertilizer rates" description="Start with the rate you would normally use. Each zone gets a little more or a little less. Every number updates as you go." />
 
         <SourceBadge scene={analysis.scene} fallbackReason={analysis.fallbackReason} clearFraction={analysis.clearFraction} />
 

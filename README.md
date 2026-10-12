@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="NitroZone: nitrogen only where your corn needs it. Sentinel-2 red-edge imagery to management zones to a variable-rate sidedress prescription." width="100%" />
+  <img src="docs/banner.svg" alt="NitroZone: give every part of your field just what it needs." width="100%" />
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 Most Missouri corn gets one nitrogen rate from fence to fence, but no field is uniform. Strong areas get more N than the crop can use, and that surplus can leave the field. The USGS estimates that **66% of the nitrogen reaching the Gulf of Mexico** from the Mississippi basin comes from cultivated crops, mostly corn and soybeans ([source](https://water.usgs.gov/nawqa/sparrow/gulf_findings/primary_sources.html)). In University of Missouri on-farm demos, sensor-guided sidedressing **saved 24 lb N/acre on average while breaking even on yield** ([source](https://extension.missouri.edu/media/wysiwyg/Extensiondata/Pro/NutrientManagement/Docs/Crop_Sensors_to_Guide_N_Application_to_Reduce_N_Loss.pdf)). Those demos needed expensive canopy sensors.
 
-**NitroZone does the same kind of analysis with free satellite data, in a browser.** Draw your field, let it read Sentinel-2's red-edge band, review the zones it finds, and download a shapefile your rate controller can load.
+**NitroZone helps any farmer do the same kind of analysis with free satellite photos, in a web browser.** It was built and tested on Missouri corn and fits crops that need in-season nitrogen, such as corn, wheat and sorghum. Draw your field, let it read Sentinel-2's red-edge band, review the zones it finds, and download a shapefile your rate controller can load.
 
 <p align="center">
   <img src="docs/demo.gif" alt="Animated walkthrough: analyzing the demo field, the zone map sweeping in over the satellite image, switching NDRE and nitrogen-rate layers, and scrolling the results charts" width="88%" />
@@ -36,8 +36,8 @@ Most Missouri corn gets one nitrogen rate from fence to fence, but no field is u
 | ![Results screen with zone map, health score, KPIs and zone strip](docs/results.png) | ![Histogram, nitrogen by zone, savings waterfall and field profile charts](docs/results-charts.png) |
 | **Rates: every number updates live** | **NDRE heat map (10 m pixels)** |
 | ![Rate settings with per-zone adjustments and live totals](docs/step-rates.png) | ![NDRE layer over the field](docs/results-ndre.png) |
-| **Landing page** | **iPad layout** |
-| ![Landing page hero with the real demo prescription](docs/landing.png) | ![Results on an iPad: map stacked above analytics](docs/ipad-results.png) |
+| **Homepage** | **iPad layout** |
+| ![Homepage with a farmer photo story and the real demo zone map](docs/landing.png) | ![Results on an iPad: map stacked above analytics](docs/ipad-results.png) |
 
 ## Features
 

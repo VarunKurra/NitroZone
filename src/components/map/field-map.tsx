@@ -11,7 +11,7 @@ import * as maplibregl from "maplibre-gl";
 import type { GeoJSONSource, MapMouseEvent, MapTouchEvent } from "maplibre-gl";
 import { TerraDraw, TerraDrawPolygonMode, TerraDrawRenderMode, TerraDrawSelectMode } from "terra-draw";
 import { TerraDrawMapLibreGLAdapter } from "terra-draw-maplibre-gl-adapter";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Feature, FeatureCollection, Polygon } from "geojson";
 import { useApp } from "@/store/app-store";
 import { usePrescription } from "@/hooks/use-prescription";
@@ -40,7 +40,9 @@ export default function FieldMap() {
   const drawRef = useRef<TerraDraw | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
   const [ready, setReady] = useState(false);
-  const [hoverInfo, setHoverInfo] = useState<{ x: number; y: number; id: number; w: number } | null>(null);
+  const [hoverInfo, setHoverInfo] = useState<{ id: number } | null>(null);
+  const tipRef = useRef<HTMLDivElement>(null);
+  const tipPos = useRef("translate(0px, 0px)");
 
   const field = useApp((s) => s.field);
   const reference = useApp((s) => s.reference);
@@ -328,7 +330,10 @@ export default function FieldMap() {
       const id = f ? Number(f.id) : null;
       if (id !== hovered) setHover(id);
       map.getCanvas().style.cursor = id !== null ? (useApp.getState().brushZone ? "crosshair" : "pointer") : "";
-      setHoverInfo(id !== null ? { x: e.point.x, y: e.point.y, id, w: map.getContainer().clientWidth } : null);
+      // Only re-render React when the hovered cell changes; move the tooltip directly.
+      setHoverInfo((prev) => (prev?.id === id ? prev : id !== null ? { id } : null));
+      tipPos.current = `translate(${Math.min(e.point.x + 14, map.getContainer().clientWidth - 190)}px, ${e.point.y + 14}px)`;
+      if (tipRef.current) tipRef.current.style.transform = tipPos.current;
     };
     const onLeave = () => {
       setHover(null);
@@ -462,14 +467,19 @@ export default function FieldMap() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // place a freshly mounted tooltip at the last pointer position
+  useLayoutEffect(() => {
+    if (tipRef.current) tipRef.current.style.transform = tipPos.current;
+  }, [hoverInfo]);
+
   const hoverCell = hoverInfo && analysis && rx ? analysis.cells[hoverInfo.id] : null;
   return (
     <div className="relative h-full w-full overflow-hidden bg-field-950">
       <div ref={container} className="h-full w-full" />
       {hoverInfo && hoverCell && rx && showCells && !brushZone && (
         <div
-          className="pointer-events-none absolute z-10 rounded-lg bg-white/95 px-2.5 py-1.5 text-xs shadow-[var(--shadow-float)] ring-1 ring-black/5"
-          style={{ left: Math.min(hoverInfo.x + 14, hoverInfo.w - 190), top: hoverInfo.y + 14 }}
+          ref={tipRef}
+          className="pointer-events-none absolute left-0 top-0 z-10 rounded-lg bg-white/95 px-2.5 py-1.5 text-xs shadow-[var(--shadow-float)] ring-1 ring-black/5"
         >
           <div className="flex items-center gap-1.5 font-semibold">
             <span className="size-2.5 rounded-sm" style={{ background: zoneColor(rx.zones[hoverInfo.id], analysis!.zoning.zoneCount) }} />

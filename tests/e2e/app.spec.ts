@@ -81,8 +81,12 @@ test.describe("workspace", () => {
     await page.waitForTimeout(2200); // reveal animation
     const map = page.locator(".maplibregl-canvas");
     const box = (await map.boundingBox())!;
-    await page.mouse.click(box.x + box.width * 0.55, box.y + box.height * 0.45);
     const inspector = page.getByTestId("cell-inspector");
+    // click a few spots inside the field until one lands on a grid square (not a zone label)
+    for (const [fx, fy] of [[0.55, 0.45], [0.5, 0.6], [0.6, 0.3], [0.45, 0.5]]) {
+      await page.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
+      if (await inspector.isVisible({ timeout: 1500 }).catch(() => false)) break;
+    }
     await expect(inspector).toBeVisible();
     // move the cell to a zone it isn't in
     const enabled = inspector.locator("button[aria-label^='Move cell to zone']:not([disabled])").first();

@@ -73,7 +73,7 @@ export function SharedReport({ slug }: { slug: string }) {
         <div>
           <TriangleAlert className="mx-auto size-8 text-harvest-600" />
           <h1 className="mt-4 font-display text-2xl font-bold">Report not found</h1>
-          <p className="mt-2 text-muted-foreground">This link may have expired, or it was created while offline and only works on the device that made it.</p>
+          <p className="mt-2 text-muted-foreground">This link may have expired, or it only works on the device that made it.</p>
           <Button asChild className="mt-6" size="lg">
             <Link href="/app">Open NitroZone</Link>
           </Button>
@@ -95,7 +95,7 @@ export function SharedReport({ slug }: { slug: string }) {
 
   return (
     <div className="min-h-dvh bg-background">
-      <header className="border-b bg-white">
+      <header className="border-b bg-[#f8f5ee]">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-5">
           <Link href="/" className="flex items-center gap-2">
             <LogoMark className="size-8" />
@@ -103,7 +103,7 @@ export function SharedReport({ slug }: { slug: string }) {
               Nitro<span className="text-primary">Zone</span>
             </span>
           </Link>
-          <span className="ml-2 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">Shared report · read-only</span>
+          <span className="ml-2 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">Shared field plan</span>
           <Button asChild variant="outline" className="ml-auto">
             <Link href="/app">
               Make your own <ArrowRight />
@@ -114,7 +114,7 @@ export function SharedReport({ slug }: { slug: string }) {
       <main id="main" className="mx-auto max-w-6xl px-5 py-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-primary">Variable-rate nitrogen prescription</p>
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-primary">Field plan</p>
             <h1 className="mt-1 font-display text-[2.2rem] font-bold tracking-[-0.02em]">{payload.fieldName}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <SourceBadge scene={payload.scene} compact />
@@ -139,29 +139,29 @@ export function SharedReport({ slug }: { slug: string }) {
             <section className="flex items-center gap-5 rounded-3xl border bg-white p-6 shadow-[var(--shadow-soft)]">
               <HealthRing score={payload.health.score} label={payload.health.label} />
               <dl className="grid flex-1 grid-cols-2 gap-x-4 gap-y-3 text-sm">
-                <Stat k="Field area" v={`${t.areaAc.toFixed(1)} ac`} />
-                <Stat k="Average rate" v={`${t.avgRateLbAc.toFixed(0)} lb N/ac`} />
-                <Stat k="Nitrogen in plan" v={`${Math.round(t.variableLbN).toLocaleString()} lb`} />
-                <Stat k={t.usesMoreThanFlat ? "Est. extra cost" : "Est. savings"} v={`$${Math.abs(Math.round(t.savedUsd)).toLocaleString()}`} strong />
+                <Stat k="Field size" v={`${t.areaAc.toFixed(0)} acres`} />
+                <Stat k="Average rate" v={`${t.avgRateLbAc.toFixed(0)} lb/acre`} />
+                <Stat k="Fertilizer needed" v={`${Math.round(t.variableLbN).toLocaleString()} lb`} />
+                <Stat k={t.usesMoreThanFlat ? "Extra cost" : "Money saved"} v={`$${Math.abs(Math.round(t.savedUsd)).toLocaleString()}`} strong />
               </dl>
             </section>
             <section className="rounded-3xl border bg-white p-6 shadow-[var(--shadow-soft)]" aria-label="Zones">
-              <h2 className="font-display text-lg font-semibold">Zones and rates</h2>
+              <h2 className="font-display text-lg font-semibold">Zones</h2>
               <ul className="mt-3 divide-y">
                 {payload.summaries.map((z) => (
                   <li key={z.zone} className="flex items-center gap-3 py-2.5 text-sm">
                     <span className="size-3.5 rounded" style={{ background: zoneColor(z.zone, payload.zoneCount) }} />
                     <span className="font-semibold">Z{z.zone}</span>
                     <span className="text-muted-foreground">{zoneLabel(z.zone, payload.zoneCount)}</span>
-                    <span className="ml-auto tabular text-muted-foreground">{z.areaAc.toFixed(1)} ac</span>
-                    <span className="w-24 text-right font-semibold tabular">{z.rateLbAc.toFixed(0)} lb N/ac</span>
+                    <span className="ml-auto tabular text-muted-foreground">{z.areaAc.toFixed(0)} acres</span>
+                    <span className="w-24 text-right font-semibold tabular">{z.rateLbAc.toFixed(0)} lb/acre</span>
                   </li>
                 ))}
               </ul>
             </section>
             {payload.insights.length > 0 && (
               <section className="rounded-3xl border bg-white p-6 shadow-[var(--shadow-soft)]" aria-label="Insights">
-                <h2 className="font-display text-lg font-semibold">Field insights</h2>
+                <h2 className="font-display text-lg font-semibold">What this means</h2>
                 <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed">
                   {payload.insights.map((l) => (
                     <li key={l}>{l}</li>
@@ -216,7 +216,7 @@ function StaticZoneMap({ ctx }: { ctx: ReportContext }) {
         ))}
       </svg>
       <figcaption className="mt-4 flex items-center justify-center gap-1.5 text-xs text-white/60">
-        <MapIcon className="size-3.5" /> {ctx.cellSizeM} m prescription grid · north up
+        <MapIcon className="size-3.5" /> North is up
       </figcaption>
     </figure>
   );

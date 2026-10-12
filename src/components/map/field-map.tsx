@@ -168,7 +168,10 @@ export default function FieldMap() {
         }
       });
       drawRef.current = draw;
-      mapBridge.set(map);
+      mapBridge.set({
+        flyTo: (center, zoom) => map.flyTo({ center, zoom, duration: reducedMotion() ? 0 : 1600, essential: true }),
+        fitBounds: (b, padding) => map.fitBounds(b, { padding, duration: reducedMotion() ? 0 : 1200, maxZoom: 17 }),
+      });
       setReady(true);
     });
 

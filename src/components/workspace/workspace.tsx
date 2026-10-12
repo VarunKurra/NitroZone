@@ -24,7 +24,8 @@ import { BrushBanner, CellInspector, LayerSwitcher, MapLegend } from "@/componen
 import { DownloadMenu } from "@/components/results/download-menu";
 import { cn } from "@/lib/utils";
 
-const FieldMap = dynamic(() => import("@/components/map/field-map"), {
+// MapView picks the WebGL map or, without WebGL, the simple map.
+const FieldMap = dynamic(() => import("@/components/map/map-view"), {
   ssr: false,
   loading: () => (
     <div className="grid h-full w-full place-items-center bg-field-950">
@@ -154,7 +155,7 @@ function TopBar() {
   const reachable: Record<Step, boolean> = { field: true, imagery: Boolean(field), rates: Boolean(analysis), results: Boolean(analysis && generated) };
   const idx = STEPS.findIndex((s) => s.key === step);
   return (
-    <header className="relative z-30 flex h-16 shrink-0 items-center gap-3 border-b bg-white/90 px-3 backdrop-blur sm:px-4">
+    <header className="relative z-30 flex h-16 shrink-0 items-center gap-3 border-b bg-[#f8f5ee]/90 px-3 backdrop-blur sm:px-4">
       <Link href="/" className="flex items-center gap-2 rounded-lg pr-1" aria-label="NitroZone home">
         <LogoMark className="size-8" />
         <span className="hidden font-display text-[1.1rem] font-bold tracking-[-0.02em] md:inline">

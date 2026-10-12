@@ -26,8 +26,8 @@ function Eyebrow({ children, className }: { children: React.ReactNode; className
 // ------------------------------------------------------------------ hero
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-6 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:pb-20 lg:pt-6">
+    <section className="relative flex items-center overflow-hidden lg:min-h-[calc(100svh-4rem)]">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-10 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:py-8">
         <div>
           <motion.h1
             initial={{ opacity: 0, y: 14 }}

@@ -52,7 +52,7 @@ export function HeroStory() {
 
   return (
     <div className="relative mx-auto w-fit max-w-full">
-      <div className="relative aspect-[4/5] h-[min(62vh,520px)] max-w-full overflow-hidden rounded-[2rem] bg-field-950 shadow-[0_30px_60px_-20px_rgba(20,32,26,0.35)] ring-1 ring-black/5">
+      <div className="relative aspect-[4/5] h-[min(68vh,580px)] max-w-full overflow-hidden rounded-[2rem] bg-field-950 shadow-[0_30px_60px_-20px_rgba(20,32,26,0.35)] ring-1 ring-black/5">
         {/* 1. farmer checking the field */}
         <Image
           src="/images/farmer-checking-field.jpg"

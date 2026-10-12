@@ -108,14 +108,13 @@ export function InsightsCard() {
         </Button>
       </div>
       <ul className="mt-4 space-y-2.5">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {lines.map((l, i) => (
-            <motion.li key={`${status}-${i}-${l.slice(0, 24)}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: i * 0.06 }} className="flex gap-2.5 text-[0.9rem] leading-relaxed">
-              {status === "ai" ? <Bot className="mt-1 size-3.5 shrink-0 text-primary" /> : <ListChecks className="mt-1 size-3.5 shrink-0 text-primary" />}
-              <span>{l}</span>
-            </motion.li>
-          ))}
-        </AnimatePresence>
+        {/* new lines replace old ones instantly (no exit animation), so two sets never overlap */}
+        {lines.map((l, i) => (
+          <motion.li key={`${status}-${i}-${l.slice(0, 24)}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }} className="flex gap-2.5 text-[0.9rem] leading-relaxed">
+            {status === "ai" ? <Bot className="mt-1 size-3.5 shrink-0 text-primary" /> : <ListChecks className="mt-1 size-3.5 shrink-0 text-primary" />}
+            <span>{l}</span>
+          </motion.li>
+        ))}
         {status === "loading" && !lines.length && [0, 1, 2].map((i) => <li key={i} className="h-4 animate-pulse rounded bg-muted" />)}
       </ul>
 

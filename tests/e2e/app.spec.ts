@@ -146,7 +146,7 @@ test.describe("workspace", () => {
     const href = (await link.getAttribute("href"))!;
     await page.goto(href);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Audrain County demo field");
-    await expect(page.getByText("Zones and rates")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Zones", exact: true })).toBeVisible();
   });
 
   test("draw a field by clicking corners", async ({ page }) => {
@@ -193,3 +193,4 @@ test.describe("tablet", () => {
     await expect(page.getByTestId("health-score")).toBeVisible();
   });
 });
+

@@ -5,6 +5,9 @@
  */
 export type Bounds = [[number, number], [number, number]];
 
+/** Where the map opens: Missouri farmland (Audrain County), close enough to outline a field right away. */
+export const START_VIEW = { center: [-91.72, 39.27] as [number, number], zoom: 14 };
+
 export interface MapAdapter {
   flyTo(center: [number, number], zoom: number): void;
   fitBounds(bounds: Bounds, padding: number): void;

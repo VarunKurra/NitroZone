@@ -1,15 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Bot, ListChecks, Loader2, MessageSquareText, RefreshCw, Sparkles } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { Bot, ListChecks, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePrescription } from "@/hooks/use-prescription";
 import { useApp } from "@/store/app-store";
 import { ruleInsights } from "@/lib/agronomy/health";
-import { zoneColor, zoneLabel } from "@/lib/palette";
-import { cn } from "@/lib/utils";
+import { zoneLabel } from "@/lib/palette";
 
 /** Compact, number-only summary sent to the server (never imagery or location). */
 export function useInsightBody(mode: "field" | "zone" = "field", focusZone?: number) {
@@ -62,9 +61,6 @@ export const insightsCache: { lines: string[]; source: "gemini" | "rules" } = { 
 export function InsightsCard() {
   const body = useInsightBody("field");
   const debounced = useDebounced(body, 1200);
-  const zc = useApp((s) => s.analysis?.zoning.zoneCount ?? 4);
-  const [zone, setZone] = useState<number | null>(null);
-  const zoneBody = useInsightBody("zone", zone ?? undefined);
 
   const q = useQuery({
     queryKey: ["insights", debounced],
@@ -73,16 +69,9 @@ export function InsightsCard() {
     staleTime: Infinity,
     retry: false,
   });
-  const zq = useQuery({
-    queryKey: ["insights-zone", zone, zoneBody?.zones, zoneBody?.totals],
-    enabled: zone !== null && Boolean(zoneBody),
-    queryFn: ({ signal }) => fetchInsights(zoneBody, signal),
-    staleTime: Infinity,
-    retry: false,
-  });
 
   const ai = q.data?.source === "gemini" && q.data.insights?.length ? q.data.insights : null;
-  const lines = useMemo(() => ai ?? body?.ruleInsights ?? [], [ai, body]);
+  const lines = useMemo(() => (ai ?? body?.ruleInsights ?? []).slice(0, 3), [ai, body]);
   useEffect(() => {
     insightsCache.lines = lines;
     insightsCache.source = ai ? "gemini" : "rules";
@@ -90,16 +79,16 @@ export function InsightsCard() {
   const status = q.isFetching ? "loading" : ai ? "ai" : "rules";
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-white via-white to-field-50/70 p-4 shadow-[var(--shadow-soft)] sm:p-5" aria-label="Field insights" data-testid="insights">
+    <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-white via-white to-river-50 p-4 shadow-[var(--shadow-soft)] sm:p-5" aria-label="Field insights" data-testid="insights">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-field-900 text-white">
+          <span className="grid size-9 place-items-center rounded-xl bg-river-600 text-white">
             <Sparkles className="size-4" />
           </span>
           <div>
-            <h3 className="font-display text-[1.02rem] font-semibold">What this means for your field</h3>
+            <h3 className="font-display text-[1.02rem] font-semibold">Quick summary</h3>
             <p className="text-xs text-muted-foreground" aria-live="polite">
-              {status === "loading" ? "Writing a summary…" : status === "ai" ? "Summary written by AI (Google Gemini)" : "Summary"}
+              {status === "loading" ? "Writing a summary…" : status === "ai" ? "Written with AI" : "Based on your numbers"}
             </p>
           </div>
         </div>
@@ -118,56 +107,7 @@ export function InsightsCard() {
         {status === "loading" && !lines.length && [0, 1, 2].map((i) => <li key={i} className="h-4 animate-pulse rounded bg-muted" />)}
       </ul>
 
-      <div className="mt-4 border-t pt-4">
-        <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-          <MessageSquareText className="size-3.5" /> Tell me about a zone
-        </div>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {Array.from({ length: zc }, (_, i) => i + 1).map((z) => (
-            <button
-              key={z}
-              type="button"
-              onClick={() => setZone(zone === z ? null : z)}
-              aria-pressed={zone === z}
-              className={cn("flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-semibold transition", zone === z ? "border-foreground/30 bg-muted" : "bg-white hover:bg-muted")}
-              data-testid={`explain-zone-${z}`}
-            >
-              <span className="size-2.5 rounded-[3px]" style={{ background: zoneColor(z, zc) }} />Z{z}
-            </button>
-          ))}
-        </div>
-        <AnimatePresence>
-          {zone !== null && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-              <div className="mt-3 rounded-xl bg-muted/60 p-3 text-[0.88rem] leading-relaxed" aria-live="polite">
-                {zq.isFetching ? (
-                  <span className="flex items-center gap-2 text-muted-foreground">
-                    <Loader2 className="size-3.5 animate-spin" /> Explaining zone {zone}…
-                  </span>
-                ) : zq.data?.source === "gemini" && zq.data.insights?.length ? (
-                  zq.data.insights.join(" ")
-                ) : (
-                  <ZoneFallback zone={zone} />
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
     </section>
   );
 }
 
-function ZoneFallback({ zone }: { zone: number }) {
-  const rx = usePrescription();
-  const zc = useApp((s) => s.analysis?.zoning.zoneCount ?? 4);
-  const z = rx?.summaries[zone - 1];
-  if (!rx || !z) return null;
-  const adj = Math.round(z.adjustment * 100);
-  return (
-    <>
-      Zone {zone} ({zoneLabel(zone, zc).toLowerCase()}) covers {z.areaAc.toFixed(0)} acres. Its crop is {Math.round(z.sufficiency * 100)}% as healthy as the best part of the field, so it gets {z.rateLbAc.toFixed(0)} lb per acre ({adj > 0 ? `${adj}% more` : `${Math.abs(adj)}% less`} than usual).{" "}
-      {z.sufficiency < 0.95 ? "Check it in person: wet soil or pests can look the same from space." : "It looks healthy."}
-    </>
-  );
-}

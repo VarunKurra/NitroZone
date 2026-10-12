@@ -3,7 +3,6 @@
 import { Brush, Hand, Redo2, RotateCcw, Undo2 } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Kbd } from "@/components/ui/kbd";
 import { useApp } from "@/store/app-store";
 import { zoneColor } from "@/lib/palette";
 import { cn } from "@/lib/utils";
@@ -86,9 +85,6 @@ export function ZoneEditor() {
         <Button size="sm" variant="ghost" onClick={resetEdits} disabled={!edits}>
           <RotateCcw /> Start over
         </Button>
-        <span className="ml-auto hidden text-xs text-muted-foreground lg:inline" data-dev-only>
-          <Kbd>1</Kbd>–<Kbd>{zc}</Kbd> brush · <Kbd>Esc</Kbd> stop · <Kbd>⌘Z</Kbd> undo
-        </span>
       </div>
     </section>
   );

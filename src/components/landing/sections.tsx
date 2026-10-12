@@ -123,15 +123,15 @@ function Stat({ value, text, source, href, tone }: { value: string; text: string
 // ------------------------------------------------------------ how it works
 export function HowItWorks() {
   const steps = [
-    { icon: MapPinned, title: "Outline your field", text: "Find your farm and click around the edges." },
-    { icon: Satellite, title: "We check the crop", text: "A satellite photo shows which spots are healthy and which are struggling." },
-    { icon: Download, title: "Get your plan", text: "See how much fertilizer each area needs, and download it for your tractor." },
+    { icon: MapPinned, title: "Outline your field", text: "Find your farm and click around the edges.", tint: "bg-field-50 text-field-700" },
+    { icon: Satellite, title: "We check the crop", text: "A satellite photo shows which spots are healthy and which are struggling.", tint: "bg-river-50 text-river-600" },
+    { icon: Download, title: "Get your plan", text: "See how much fertilizer each area needs, and download it for your tractor.", tint: "bg-harvest-50 text-harvest-700" },
   ];
   return (
     <section id="how" className="scroll-mt-20 bg-[#f1ece1]" aria-labelledby="how-title">
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <Eyebrow>How it works</Eyebrow>
+          <Eyebrow className="text-river-600">How it works</Eyebrow>
           <h2 id="how-title" className="mt-3 font-display text-[2.2rem] font-bold leading-[1.1] tracking-[-0.02em] sm:text-[2.7rem]">
             Three steps. About a minute.
           </h2>
@@ -141,7 +141,7 @@ export function HowItWorks() {
             <Reveal key={s.title} delay={0.06 * i}>
               <li className="h-full rounded-2xl bg-white p-7 shadow-[var(--shadow-soft)]">
                 <div className="flex items-center gap-3">
-                  <span className="grid size-10 place-items-center rounded-xl bg-field-50 text-field-700">
+                  <span className={cn("grid size-10 place-items-center rounded-xl", s.tint)}>
                     <s.icon className="size-5" aria-hidden />
                   </span>
                   <span className="text-sm font-semibold text-muted-foreground">Step {i + 1}</span>

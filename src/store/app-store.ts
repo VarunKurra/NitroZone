@@ -15,7 +15,7 @@ import type { StacScene } from "@/lib/imagery/sentinel";
 export type Step = "field" | "imagery" | "rates" | "results";
 export type MapLayer = "zones" | "primary" | "secondary" | "rate" | "truecolor";
 export type SourceChoice = "satellite" | "drone";
-export type DrawMode = "idle" | "draw-field" | "edit-field" | "draw-strip";
+export type DrawMode = "idle" | "pan" | "draw-field" | "edit-field" | "draw-strip";
 
 export interface DroneFile {
   name: string;

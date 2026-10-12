@@ -64,8 +64,7 @@ test.describe("workspace", () => {
 
     // insights: either AI or rule-based, never empty
     await expect(page.getByTestId("insights").locator("li").first()).toBeVisible();
-    await page.getByTestId("explain-zone-1").click();
-    await expect(page.getByTestId("insights")).toContainText(/Zone 1|zone 1/);
+    await expect(page.getByTestId("results-headline")).toContainText("could save about $");
 
     // map layers switch without errors
     for (const l of ["rate", "primary", "truecolor", "zones"]) await page.getByTestId(`layer-${l}`).click();
@@ -78,7 +77,7 @@ test.describe("workspace", () => {
   test("zone editing via cell inspector is undoable", async ({ page }) => {
     await runDemoToResults(page);
     await page.getByTestId("generate").click();
-    await page.waitForTimeout(2200); // reveal animation
+    await page.waitForTimeout(3000); // reveal animation
     const map = page.locator(".maplibregl-canvas");
     const box = (await map.boundingBox())!;
     const inspector = page.getByTestId("cell-inspector");

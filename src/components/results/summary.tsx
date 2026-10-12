@@ -14,7 +14,7 @@ export function HealthRing({ score, label }: { score: number; label: string }) {
   const reduce = useReducedMotion();
   const r = 52;
   const c = 2 * Math.PI * r;
-  const color = score >= 92 ? "#15653d" : score >= 85 ? "#2fae8a" : score >= 75 ? "#c4b42f" : "#d6631c";
+  const color = score >= 92 ? "#0072a3" : score >= 85 ? "#2fae8a" : score >= 75 ? "#c4b42f" : "#d6631c";
   return (
     <div className="relative size-[132px] shrink-0">
       <svg viewBox="0 0 132 132" className="size-full -rotate-90" aria-hidden>
@@ -94,8 +94,8 @@ export function SummaryCard() {
           tone={more ? "warn" : "good"}
           testId="kpi-savings"
         />
-        <Kpi label={more ? "Extra fertilizer" : "Fertilizer saved"} value={Math.abs(t.savedLbN)} unit="lb" sub={`${Math.abs(reductionPct).toFixed(0)}% ${more ? "more" : "less"}`} tone={more ? "warn" : undefined} />
-        <Kpi label="Zones" value={rx.summaries.filter((z) => z.areaAc > 0).length} unit="" sub="areas with their own rate" />
+        <Kpi label={more ? "Extra fertilizer" : "Fertilizer saved"} value={Math.abs(t.savedLbN)} unit="lb" sub={`${Math.abs(reductionPct).toFixed(0)}% ${more ? "more" : "less"}`} tone={more ? "warn" : "blue"} />
+        <Kpi label="Zones" value={rx.summaries.filter((z) => z.areaAc > 0).length} unit="" />
       </div>
       {more && (
         <div className="flex items-start gap-2 border-t bg-harvest-50 px-5 py-3 text-sm text-harvest-700" role="alert">
@@ -109,11 +109,11 @@ export function SummaryCard() {
   );
 }
 
-function Kpi({ label, value, unit, decimals = 0, prefix = "", sub, tone, testId }: { label: string; value: number; unit: string; decimals?: number; prefix?: string; sub?: string; tone?: "good" | "warn"; testId?: string }) {
+function Kpi({ label, value, unit, decimals = 0, prefix = "", sub, tone, testId }: { label: string; value: number; unit: string; decimals?: number; prefix?: string; sub?: string; tone?: "good" | "warn" | "blue"; testId?: string }) {
   return (
     <div className="border-b border-r px-5 py-4 [&:nth-child(2n)]:border-r-0 sm:[&:nth-child(2n)]:border-r sm:[&:nth-child(3n)]:border-r-0 [&:nth-last-child(-n+2)]:border-b-0 sm:[&:nth-last-child(-n+3)]:border-b-0" data-testid={testId}>
       <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">{label}</div>
-      <div className={cn("mt-1 font-display text-[1.6rem] font-bold leading-tight tracking-[-0.02em]", tone === "good" && "text-field-700", tone === "warn" && "text-harvest-700")}>
+      <div className={cn("mt-1 font-display text-[1.6rem] font-bold leading-tight tracking-[-0.02em]", tone === "good" && "text-field-700", tone === "warn" && "text-harvest-700", tone === "blue" && "text-river-600")}>
         <NumberTicker value={value} decimals={decimals} prefix={prefix} />
         {unit && <span className="ml-1 text-[0.8rem] font-medium tracking-normal text-muted-foreground">{unit}</span>}
       </div>

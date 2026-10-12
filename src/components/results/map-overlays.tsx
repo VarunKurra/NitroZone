@@ -2,12 +2,11 @@
 
 import { Brush, Layers, MapPin, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useMemo } from "react";
+
 import { Button } from "@/components/ui/button";
 import { usePrescription } from "@/hooks/use-prescription";
 import { useApp, type MapLayer } from "@/store/app-store";
 import { INDEX_RAMP, RATE_RAMP, zoneColor, zoneLabel } from "@/lib/palette";
-import { percentile } from "@/lib/agronomy/indices";
 import { cn } from "@/lib/utils";
 
 /** Layer switcher (top-left of the map). */
@@ -20,7 +19,7 @@ export function LayerSwitcher() {
     { v: "zones", label: "Zones" },
     { v: "rate", label: "Fertilizer" },
     { v: "primary", label: "Crop health" },
-    { v: "truecolor", label: "True color", disabled: !analysis.preview.rgba },
+    { v: "truecolor", label: "Photo" },
   ];
   return (
     <div className="glass pointer-events-auto flex items-center gap-0.5 rounded-xl p-1 shadow-[var(--shadow-float)] ring-1 ring-black/5" role="radiogroup" aria-label="Map layer">
@@ -49,14 +48,7 @@ export function MapLegend() {
   const layer = useApp((s) => s.mapLayer);
   const analysis = useApp((s) => s.analysis);
   const rx = usePrescription();
-  const ranges = useMemo(() => {
-    if (!analysis) return null;
-    return {
-      primary: [percentile(analysis.preview.primary, 2), percentile(analysis.preview.primary, 98)],
-      secondary: [percentile(analysis.preview.secondary, 2), percentile(analysis.preview.secondary, 98)],
-    };
-  }, [analysis]);
-  if (!analysis || !rx || !ranges) return null;
+  if (!analysis || !rx) return null;
   const zc = analysis.zoning.zoneCount;
   const box = "glass pointer-events-auto rounded-xl px-3 py-2.5 shadow-[var(--shadow-float)] ring-1 ring-black/5";
   if (layer === "zones")
@@ -78,12 +70,12 @@ export function MapLegend() {
   if (layer === "truecolor")
     return (
       <div className={box}>
-        <div className="text-xs font-medium">Satellite photo</div>
+        <div className="text-xs font-medium">Satellite photo of your field</div>
       </div>
     );
   const isRate = layer === "rate";
-  const lo = isRate ? Math.min(...rx.rates) : ranges[layer as "primary" | "secondary"][0];
-  const hi = isRate ? Math.max(...rx.rates) : ranges[layer as "primary" | "secondary"][1];
+  const lo = Math.min(...rx.rates);
+  const hi = Math.max(...rx.rates);
   const ramp = isRate ? RATE_RAMP : INDEX_RAMP;
   const name = isRate ? "Fertilizer (lb/acre)" : "Crop health";
   return (
@@ -91,9 +83,9 @@ export function MapLegend() {
       <div className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">{name}</div>
       <div className="h-2.5 rounded-full" style={{ background: `linear-gradient(90deg, ${ramp.join(",")})` }} />
       <div className="mt-1 flex justify-between text-[0.7rem] font-medium tabular">
-        <span>{isRate ? lo.toFixed(0) : lo.toFixed(2)}</span>
-        <span className="text-muted-foreground">{isRate ? "more →" : "healthier →"}</span>
-        <span>{isRate ? hi.toFixed(0) : hi.toFixed(2)}</span>
+        <span>{isRate ? lo.toFixed(0) : "Weaker"}</span>
+        <span className="text-muted-foreground">{isRate ? "more →" : ""}</span>
+        <span>{isRate ? hi.toFixed(0) : "Healthier"}</span>
       </div>
     </div>
   );

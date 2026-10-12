@@ -15,9 +15,10 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { Feature, FeatureCollection, Polygon } from "geojson";
 import { useApp } from "@/store/app-store";
 import { usePrescription } from "@/hooks/use-prescription";
-import { RATE_RAMP, rampColor, zoneColor } from "@/lib/palette";
-import { mapBridge } from "./map-bridge";
-import { indexImage, stretchOf, trueColorImage } from "./raster-image";
+import { zoneColor } from "@/lib/palette";
+import { mapBridge, START_VIEW } from "./map-bridge";
+import { cellFill } from "./cell-colors";
+import { MapTools } from "./map-tools";
 import { polygonsOf } from "@/lib/agronomy/geo";
 import type { FieldPolygon } from "@/lib/agronomy/types";
 
@@ -25,8 +26,6 @@ const ESRI_IMAGERY = "https://server.arcgisonline.com/ArcGIS/rest/services/World
 const ESRI_LABELS = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}";
 const ESRI_ROADS = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}";
 const EMPTY: FeatureCollection = { type: "FeatureCollection", features: [] };
-// shifted west so Missouri sits in the open area to the right of the step panel
-const MISSOURI: [number, number] = [-94.1, 38.4];
 
 // Served from /public (copied on npm install), see scripts/copy-maplibre-worker.mjs.
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
@@ -77,8 +76,8 @@ export default function FieldMap() {
           { id: "labels", type: "raster", source: "labels", paint: { "raster-opacity": 0.9 } },
         ],
       },
-      center: MISSOURI,
-      zoom: 6.3,
+      center: START_VIEW.center,
+      zoom: START_VIEW.zoom,
       maxZoom: 18.5,
       attributionControl: { compact: true },
       canvasContextAttributes: { preserveDrawingBuffer: true },
@@ -224,22 +223,12 @@ export default function FieldMap() {
   const showCells = step === "rates" || step === "results";
   const cellData = useMemo<FeatureCollection<Polygon>>(() => {
     if (!analysis || !rx || !showCells) return EMPTY as FeatureCollection<Polygon>;
-    const zc = analysis.zoning.zoneCount;
-    let rMin = Infinity;
-    let rMax = -Infinity;
-    for (const r of rx.rates) {
-      rMin = Math.min(rMin, r);
-      rMax = Math.max(rMax, r);
-    }
-    const span = rMax - rMin || 1;
+    const fill = cellFill(analysis, rx, mapLayer);
     const rows = analysis.rows || 1;
     const features: Feature<Polygon>[] = [];
     analysis.cells.forEach((c, i) => {
       const z = rx.zones[i];
-      const color =
-        mapLayer === "rate"
-          ? rgbHex(rampColor(RATE_RAMP, (rx.rates[i] - rMin) / span))
-          : zoneColor(z, zc);
+      const color = fill(i);
       const outOfRange = valueRange ? !(c[valueRange.key] >= valueRange.min && c[valueRange.key] <= valueRange.max) : false;
       const dim = (zoneFilter.length > 0 && !zoneFilter.includes(z)) || outOfRange;
       // reveal order: north to south with a slight diagonal, so the sweep feels like a scan
@@ -258,7 +247,8 @@ export default function FieldMap() {
 
   // ------------------------------------------------------- cell opacity + reveal
   const revealRef = useRef(1);
-  const cellsVisible = showCells && (mapLayer === "zones" || mapLayer === "rate");
+  // "Photo" (truecolor) shows just the sharp basemap; every other layer is crisp squares.
+  const cellsVisible = showCells && mapLayer !== "truecolor";
   const applyCellPaint = (reveal: number) => {
     const map = mapRef.current;
     if (!map?.getLayer("cells-fill")) return;
@@ -294,21 +284,6 @@ export default function FieldMap() {
     return () => cancelAnimationFrame(raf);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, analysisVersion, generated]);
-
-  // ------------------------------------------------------------- raster overlay
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!ready || !map || !analysis) return;
-    const src = map.getSource("overlay") as maplibregl.ImageSource;
-    const p = analysis.preview;
-    let url: string | null = null;
-    if (showCells && (mapLayer === "primary" || mapLayer === "secondary")) url = indexImage(p, mapLayer, stretchOf(p[mapLayer]));
-    else if (showCells && mapLayer === "truecolor") url = trueColorImage(p);
-    if (url) {
-      src.updateImage({ url, coordinates: p.corners });
-      map.setPaintProperty("overlay", "raster-opacity", 0.95);
-    } else map.setPaintProperty("overlay", "raster-opacity", 0);
-  }, [ready, analysis, mapLayer, showCells]);
 
   // --------------------------------------------------- hover / inspect state
   const prevInspected = useRef<number | null>(null);
@@ -480,6 +455,7 @@ export default function FieldMap() {
   return (
     <div className="relative h-full w-full overflow-hidden bg-field-950">
       <div ref={container} className="h-full w-full" />
+      <MapTools />
       {hoverInfo && hoverCell && rx && showCells && !brushZone && (
         <div
           ref={tipRef}
@@ -498,10 +474,6 @@ export default function FieldMap() {
   );
 }
 
-function rgbHex([r, g, b]: [number, number, number]) {
-  const h = (n: number) => Math.round(n).toString(16).padStart(2, "0");
-  return `#${h(r)}${h(g)}${h(b)}`;
-}
 
 function transparentPng() {
   return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";

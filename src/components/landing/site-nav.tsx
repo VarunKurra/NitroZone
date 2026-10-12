@@ -21,9 +21,9 @@ export function SiteNav() {
   const [open, setOpen] = useState(false);
   useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 12));
   return (
-    <header className={cn("sticky top-0 z-50 transition-all duration-300", scrolled ? "glass border-b border-black/5 shadow-[0_1px_0_rgba(0,0,0,0.02)]" : "bg-transparent")}>
+    <header className={cn("sticky top-0 z-50 border-b bg-[#f8f5ee]/90 backdrop-blur-md transition-colors duration-300", scrolled ? "border-black/[0.06]" : "border-transparent")}>
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-5 sm:px-8">
-        <Link href="/" aria-label="NitroZone home" className="rounded-lg">
+        <Link href="/" aria-label="NitroZone home" className="flex items-center rounded-lg">
           <Logo />
         </Link>
         <nav aria-label="Main" className="hidden md:block">
@@ -50,7 +50,7 @@ export function SiteNav() {
       </div>
       <AnimatePresence>
         {open && (
-          <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t bg-white md:hidden" aria-label="Mobile">
+          <motion.nav initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t bg-[#f8f5ee] md:hidden" aria-label="Mobile">
             <ul className="space-y-1 px-5 py-4">
               {LINKS.map((l) => (
                 <li key={l.href}>

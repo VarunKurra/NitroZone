@@ -36,7 +36,7 @@ const COLUMNS = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative overflow-hidden border-t bg-[#f7f3ea]" aria-labelledby="footer-heading">
+    <footer className="relative overflow-hidden bg-[#f1ece1]" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>

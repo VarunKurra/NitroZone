@@ -26,8 +26,8 @@ function Eyebrow({ children, className }: { children: React.ReactNode; className
 // ------------------------------------------------------------------ hero
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#f7f3ea] to-background">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-20 pt-10 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-16 lg:pb-24 lg:pt-16">
+    <section className="relative overflow-hidden">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-16 pt-6 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:pb-20 lg:pt-6">
         <div>
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
@@ -68,7 +68,7 @@ export function WhyItMatters() {
     <section id="why" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-20 sm:px-8 lg:py-28" aria-labelledby="why-title">
       <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <Reveal className="relative order-2 lg:order-1">
-          <div className="relative aspect-[6/7] overflow-hidden rounded-[2rem]">
+          <div className="relative mx-auto aspect-[6/7] h-[min(64vh,520px)] max-w-full overflow-hidden rounded-[2rem]">
             <Image src="/images/farmer-fence-sunrise.jpg" alt="A farmer leaning on a fence at sunrise" fill sizes="(max-width: 1024px) 90vw, 540px" className="object-cover" />
           </div>
         </Reveal>
@@ -128,7 +128,7 @@ export function HowItWorks() {
     { icon: Download, title: "Get your plan", text: "See how much fertilizer each area needs, and download it for your tractor." },
   ];
   return (
-    <section id="how" className="scroll-mt-20 border-y bg-[#f7f3ea]" aria-labelledby="how-title">
+    <section id="how" className="scroll-mt-20 bg-[#f1ece1]" aria-labelledby="how-title">
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
           <Eyebrow>How it works</Eyebrow>
@@ -153,7 +153,7 @@ export function HowItWorks() {
           ))}
         </ol>
         <Reveal delay={0.1} className="mt-14">
-          <figure>
+          <figure className="mx-auto max-w-4xl">
             <div className="overflow-hidden rounded-[1.5rem] border bg-white shadow-[var(--shadow-card)]">
               <Image src="/images/app-preview.jpg" alt="The NitroZone results screen: a real Missouri field divided into colored zones, with a health score and fertilizer savings" width={1600} height={1000} sizes="(max-width: 1200px) 95vw, 1100px" className="h-auto w-full" />
             </div>
@@ -202,7 +202,7 @@ export function Mission() {
         <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem]">
           <Image src="/images/farmer-in-corn.jpg" alt="" fill sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/45 to-black/10" />
-          <div className="relative max-w-xl px-8 py-20 text-white sm:px-14 sm:py-24">
+          <div className="relative max-w-xl px-8 py-16 text-white sm:px-14 sm:py-20">
             <h2 className="font-display text-[2rem] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[2.5rem]">Built for the farmers who feed us, and the rivers we share.</h2>
             <p className="mt-4 text-lg text-white/80">Try it on a real Missouri field in about a minute.</p>
             <Button asChild size="xl" variant="accent" className="mt-8 rounded-xl px-6 text-base">

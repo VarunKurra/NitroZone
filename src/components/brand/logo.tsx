@@ -17,9 +17,9 @@ export function LogoMark({ className, title }: { className?: string; title?: str
 
 export function Logo({ className, wordmarkClassName }: { className?: string; wordmarkClassName?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5", className)}>
+    <span className={cn("inline-flex items-center gap-2.5 leading-none", className)}>
       <LogoMark className="size-7" />
-      <span className={cn("font-display text-[1.15rem] font-bold tracking-[-0.02em] text-foreground", wordmarkClassName)}>
+      <span className={cn("font-display text-[1.15rem] font-bold leading-none tracking-[-0.02em] text-foreground", wordmarkClassName)}>
         Nitro<span className="text-primary">Zone</span>
       </span>
     </span>

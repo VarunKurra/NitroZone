@@ -39,7 +39,7 @@ export function SiteNav() {
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
           <Button asChild size="lg" className="rounded-xl">
-            <Link href="/app?demo=1">
+            <Link href="/app">
               Try it now <ArrowRight />
             </Link>
           </Button>
@@ -61,7 +61,7 @@ export function SiteNav() {
               ))}
               <li className="pt-2">
                 <Button asChild size="xl" className="w-full">
-                  <Link href="/app?demo=1">Try it now</Link>
+                  <Link href="/app">Try it now</Link>
                 </Button>
               </li>
             </ul>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Workspace } from "@/components/workspace/workspace";
+import { PageTransition } from "@/components/common/page-transition";
 
 export const metadata: Metadata = {
   title: "Workspace",
@@ -9,8 +10,10 @@ export const metadata: Metadata = {
 
 export default function AppPage() {
   return (
-    <Suspense fallback={<div className="h-dvh animate-pulse bg-field-950" />}>
-      <Workspace />
-    </Suspense>
+    <PageTransition>
+      <Suspense fallback={<div className="h-dvh bg-background" />}>
+        <Workspace />
+      </Suspense>
+    </PageTransition>
   );
 }

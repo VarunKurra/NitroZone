@@ -25,7 +25,8 @@ const ESRI_IMAGERY = "https://server.arcgisonline.com/ArcGIS/rest/services/World
 const ESRI_LABELS = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}";
 const ESRI_ROADS = "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}";
 const EMPTY: FeatureCollection = { type: "FeatureCollection", features: [] };
-const MISSOURI: [number, number] = [-92.45, 38.45];
+// shifted west so Missouri sits in the open area to the right of the step panel
+const MISSOURI: [number, number] = [-94.1, 38.4];
 
 // Served from /public (copied on npm install), see scripts/copy-maplibre-worker.mjs.
 maplibregl.setWorkerUrl("/vendor/maplibre-gl-worker.mjs");
@@ -77,7 +78,7 @@ export default function FieldMap() {
         ],
       },
       center: MISSOURI,
-      zoom: 6.2,
+      zoom: 6.3,
       maxZoom: 18.5,
       attributionControl: { compact: true },
       canvasContextAttributes: { preserveDrawingBuffer: true },
@@ -159,7 +160,7 @@ export default function FieldMap() {
         if (ctx.mode === "strip" || f.properties.mode === "strip") {
           useApp.setState({ reference: poly, drawMode: "idle" });
         } else if (ctx.action === "draw") {
-          st.setField(poly, { name: st.fieldName === "Audrain County demo field" ? "My corn field" : st.fieldName });
+          st.setField(poly, { name: st.fieldName === "Audrain County demo field" ? "My field" : st.fieldName });
           useApp.setState({ drawMode: "idle" });
         } else {
           // vertex drag / midpoint insert / feature drag while editing

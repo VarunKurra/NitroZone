@@ -10,8 +10,7 @@ import { readFile } from "node:fs/promises";
 const num = (s: string | null) => Number((s ?? "").replace(/[^0-9.-]/g, ""));
 
 async function runDemoToResults(page: Page) {
-  await page.goto("/app");
-  await page.getByTestId("load-demo").click();
+  await page.goto("/app?demo=1");
   await expect(page.getByTestId("field-area")).toContainText("192.6");
   await page.getByTestId("to-imagery").click();
   await page.getByTestId("analyze").click();
@@ -25,8 +24,9 @@ test.describe("landing", () => {
     await expect(page.getByText("Source: USGS")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
     await page.getByTestId("hero-demo").click();
-    await expect(page).toHaveURL(/\/app\?demo=1/);
-    await expect(page.getByTestId("field-area")).toContainText("192.6");
+    await expect(page).toHaveURL(/\/app$/);
+    await expect(page.getByRole("combobox")).toBeVisible();
+    await expect(page.getByText("Upload a field outline")).toBeVisible();
   });
 
   test("science page lists formulas and limitations", async ({ page }) => {
@@ -150,10 +150,8 @@ test.describe("workspace", () => {
   });
 
   test("draw a field by clicking corners", async ({ page }) => {
-    await page.goto("/app");
-    await page.waitForTimeout(1500);
-    // zoom the map to a farm area first (same county as the demo)
-    await page.getByTestId("load-demo").click();
+    // start from the demo field's location, then redraw (drawing is on by default)
+    await page.goto("/app?demo=1");
     await page.waitForTimeout(2200); // let the camera finish flying to the field
     await page.getByRole("button", { name: "Redraw" }).click();
     const map = page.locator(".maplibregl-canvas");

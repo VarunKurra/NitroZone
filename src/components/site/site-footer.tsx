@@ -8,8 +8,7 @@ const COLUMNS = [
   {
     title: "NitroZone",
     links: [
-      { label: "Try it now", href: "/app?demo=1" },
-      { label: "Map my own field", href: "/app" },
+      { label: "Try it now", href: "/app" },
       { label: "How it works", href: "/#how" },
       { label: "Common questions", href: "/#faq" },
     ],
@@ -79,13 +78,13 @@ export function SiteFooter() {
           {/* stacked CTAs */}
           <div className="flex flex-col gap-2.5 sm:w-56">
             <Button asChild size="xl" className="justify-between rounded-xl">
-              <Link href="/app?demo=1">
+              <Link href="/app">
                 Try it now <ArrowRight />
               </Link>
             </Button>
             <Button asChild size="xl" variant="outline" className="justify-between rounded-xl">
-              <Link href="/app">
-                Map my own field <ArrowRight />
+              <Link href="/#how">
+                How it works <ArrowRight />
               </Link>
             </Button>
           </div>

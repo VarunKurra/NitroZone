@@ -40,7 +40,7 @@ const ring = (pts: [number, number][]) => `M${pts.map((p) => `${p[0].toFixed(1)}
 export default function SimpleMap() {
   const wrap = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 800, h: 600 });
-  const [view, setView] = useState({ center: [-92.45, 38.45] as [number, number], zoom: 7 });
+  const [view, setView] = useState({ center: [-94.6, 38.4] as [number, number], zoom: 7 });
   // vertices while drawing, tagged with the draw mode they belong to (switching mode discards them)
   const [draftState, setDraftState] = useState<{ mode: string; pts: [number, number][] }>({ mode: "idle", pts: [] });
   const [hover, setHover] = useState<{ id: number; x: number; y: number } | null>(null);
@@ -229,7 +229,7 @@ export default function SimpleMap() {
     const poly = { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [[...pts, pts[0]]] } } as FieldPolygon;
     if (drawMode === "draw-strip") useApp.setState({ reference: poly, drawMode: "idle" });
     else {
-      useApp.getState().setField(poly, { name: useApp.getState().fieldName === "Audrain County demo field" ? "My corn field" : useApp.getState().fieldName });
+      useApp.getState().setField(poly, { name: useApp.getState().fieldName === "Audrain County demo field" ? "My field" : useApp.getState().fieldName });
       useApp.setState({ drawMode: "idle" });
     }
     setDraft([]);

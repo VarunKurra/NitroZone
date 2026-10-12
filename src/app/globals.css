@@ -228,6 +228,26 @@
   to { opacity: 0.82; }
 }
 
+/* Page-to-page transitions (see components/common/page-transition.tsx). */
+::view-transition-old(.page-out) {
+  animation: 180ms cubic-bezier(0.4, 0, 1, 1) both nz-fade-out;
+}
+::view-transition-new(.page-in) {
+  animation: 420ms cubic-bezier(0.16, 1, 0.3, 1) 60ms both nz-rise-in;
+}
+@keyframes nz-fade-out {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes nz-rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-out),
+  ::view-transition-new(.page-in) {
+    animation: none;
+  }
+}
+
 /* Presentation mode: bigger type, hides developer-only UI (see components/present). */
 html.present {
   font-size: 17.5px;

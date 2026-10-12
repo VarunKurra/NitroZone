@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SharedReport } from "@/components/report/shared-report";
+import { PageTransition } from "@/components/common/page-transition";
 
 export const metadata: Metadata = {
   title: "Shared prescription report",
@@ -15,8 +16,10 @@ async function Loader({ params }: { params: Promise<{ slug: string }> }) {
 
 export default function ReportPage({ params }: PageProps<"/report/[slug]">) {
   return (
-    <Suspense fallback={<div className="mx-auto mt-24 h-96 max-w-5xl animate-pulse rounded-3xl bg-muted" />}>
-      <Loader params={params} />
-    </Suspense>
+    <PageTransition>
+      <Suspense fallback={<div className="mx-auto mt-24 h-96 max-w-5xl animate-pulse rounded-3xl bg-muted" />}>
+        <Loader params={params} />
+      </Suspense>
+    </PageTransition>
   );
 }

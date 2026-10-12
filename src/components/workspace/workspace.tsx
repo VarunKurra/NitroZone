@@ -111,17 +111,17 @@ export function Workspace() {
 
         {/* Step panel / results */}
         {results ? (
-          <div className="relative bg-background xl:h-full xl:overflow-y-auto xl:border-l xl:scrollbar-thin">
+          <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="relative bg-background xl:h-full xl:overflow-y-auto xl:border-l xl:scrollbar-thin">
             <ResultsPanel />
-          </div>
+          </motion.div>
         ) : (
           <AnimatePresence mode="wait">
             <motion.aside
               key={step}
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10, transition: { duration: 0.15 } }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 14, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.99, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="absolute bottom-3 left-3 top-3 z-20 w-[min(420px,46vw)] min-w-[340px] overflow-hidden rounded-3xl border bg-white/97 shadow-[var(--shadow-float)] backdrop-blur"
               aria-label={`Step: ${step}`}
             >

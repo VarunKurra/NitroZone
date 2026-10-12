@@ -99,7 +99,7 @@ export const useApp = create<State>((set, get) => ({
   step: "field",
   presentation: false,
   field: null,
-  fieldName: "My corn field",
+  fieldName: "My field",
   isDemo: false,
   savedFieldId: null,
   drawMode: "idle",

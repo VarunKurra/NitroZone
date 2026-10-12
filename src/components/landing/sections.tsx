@@ -42,7 +42,7 @@ export function Hero() {
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease }} className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="xl" className="rounded-xl px-6 text-base">
-              <Link href="/app?demo=1" data-testid="hero-demo">
+              <Link href="/app" data-testid="hero-demo">
                 Try it now <ArrowRight />
               </Link>
             </Button>
@@ -206,7 +206,7 @@ export function Mission() {
             <h2 className="font-display text-[2rem] font-bold leading-[1.15] tracking-[-0.02em] sm:text-[2.5rem]">Built for the farmers who feed us, and the rivers we share.</h2>
             <p className="mt-4 text-lg text-white/80">Try it on a real Missouri field in about a minute.</p>
             <Button asChild size="xl" variant="accent" className="mt-8 rounded-xl px-6 text-base">
-              <Link href="/app?demo=1">
+              <Link href="/app">
                 Try it now <ArrowRight />
               </Link>
             </Button>

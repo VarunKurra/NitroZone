@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SiteNav } from "@/components/landing/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { ZONE_PALETTE_5 } from "@/lib/palette";
+import { PageTransition } from "@/components/common/page-transition";
 
 export const metadata: Metadata = {
   title: "The science",
@@ -47,7 +48,7 @@ function Src({ href, children }: { href: string; children: React.ReactNode }) {
 
 export default function SciencePage() {
   return (
-    <>
+    <PageTransition>
       <SiteNav />
       <main id="main" className="mx-auto max-w-7xl px-5 pb-24 pt-12 sm:px-8">
         <header className="max-w-3xl">
@@ -192,7 +193,7 @@ ExG  = 2g − r − b     where r = R/(R+G+B), g = G/(R+G+B), b = B/(R+G+B)`}</F
 
             <div className="flex flex-wrap gap-3 border-t pt-10">
               <Button asChild size="xl" className="rounded-xl">
-                <Link href="/app?demo=1">
+                <Link href="/app">
                   Try it on the demo field <ArrowRight />
                 </Link>
               </Button>
@@ -206,6 +207,6 @@ ExG  = 2g − r − b     where r = R/(R+G+B), g = G/(R+G+B), b = B/(R+G+B)`}</F
         </div>
       </main>
       <SiteFooter />
-    </>
+    </PageTransition>
   );
 }

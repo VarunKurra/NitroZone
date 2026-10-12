@@ -12,7 +12,7 @@ export default function NotFound() {
           <Link href="/" className="inline-flex h-11 items-center rounded-xl bg-[#15653d] px-5 font-medium text-white hover:bg-[#105233]">
             Home
           </Link>
-          <Link href="/app?demo=1" className="inline-flex h-11 items-center rounded-xl border bg-white px-5 font-medium">
+          <Link href="/app" className="inline-flex h-11 items-center rounded-xl border bg-white px-5 font-medium">
             Try it now
           </Link>
         </div>

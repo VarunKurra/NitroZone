@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node scripts/copy-maplibre-worker.mjs"
   },
   "dependencies": {
     "@mapbox/shp-write": "^0.4.3",
@@ -41,6 +42,7 @@
     "@playwright/test": "^1.64.0",
     "@tailwindcss/turbopack": "^4",
     "@types/geojson": "^7946.0.16",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^24.19.2",
     "@types/proj4": "^2.5.6",
     "@types/react": "^19",

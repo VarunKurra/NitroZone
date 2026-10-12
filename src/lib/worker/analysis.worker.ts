@@ -46,7 +46,11 @@ ctx.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
     const payload: AnalysisPayload = {
       scene: lastScene,
       // metric rings stay in the worker: the UI only needs lon/lat
-      cells: out.cells.map(({ rings: _rings, ...rest }) => rest),
+      cells: out.cells.map((c) => {
+        const { rings, ...rest } = c;
+        void rings;
+        return rest;
+      }),
       cols: out.cols,
       rows: out.rows,
       lookup: out.lookup,

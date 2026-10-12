@@ -79,7 +79,7 @@ export function WhyItMatters() {
               Not every part of a field is the same.
             </h2>
             <p className="mt-5 text-[1.08rem] leading-relaxed text-muted-foreground">
-              Most fields get the same amount of fertilizer everywhere. Extra fertilizer costs farmers money, and rain can wash it into our rivers.
+              Most fields get the same fertilizer everywhere. Extra fertilizer costs farmers money, and rain washes it into rivers.
             </p>
           </Reveal>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
